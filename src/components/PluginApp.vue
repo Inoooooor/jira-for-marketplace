@@ -209,13 +209,13 @@ const valueCheck = (value) => console.log(value)
                 <option
                   v-for="(project, index) in response"
                   :key="index"
-                  :value="project.self"
+                  :value="index"
                 >
                   {{ project.name }}
                 </option>
               </select>
             </div>
-            <!-- <div class="grid grid-cols-12">
+            <div class="grid grid-cols-12">
               <label for="issueType" class="form-labels-pos required-field"
                 >Тип проблемы</label
               >
@@ -224,19 +224,18 @@ const valueCheck = (value) => console.log(value)
                 id="issueType"
                 class="centered-form-field"
                 v-model="issueTypeValue"
-                @change="getComponents()"
+                @change="valueCheck(issueTypeValue)"
               >
                 <option
-                  v-for="(issue, index) in response.projects[chosenProject]
-                    .issuetypes"
-                  :value="issue.name"
+                  v-for="(issue, index) in response[chosenProject].issueTypes"
+                  :value="issue.self"
                   :key="index"
                 >
                   {{ issue.name }}
                 </option>
               </select>
             </div>
-            
+            <!--
             <template v-if="reportersList">
               <div class="grid grid-cols-12">
                 <label for="author" class="form-labels-pos">Автор</label>
