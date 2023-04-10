@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* *::placeholder {
+    @apply pl-0;
+  } */
+  html {
+    @apply bg-white font-sans;
+  }
+  #app,
+  .plugin,
+  .tabs {
+    @apply h-full;
+  }
+  select,
+  input[id='subject'],
+  input[id='components'],
+  input[id='environment'] {
+    @apply h-4/5 w-full inline border border-gray-300 rounded place-self-center text-gray-600;
+  }
+
+  input {
+    @apply pl-1;
+  }
+  .select-container {
+    @apply flex flex-row gap-6;
+  }
+
+  textarea {
+    @apply border border-gray-300 rounded pl-1;
+  }
+
+  .required-field {
+    @apply after:content-['*'] after:ml-0.5 after:text-red-500;
+  }
+
+  button {
+    @apply border border-blue-500 rounded hover:bg-blue-500 hover:text-white text-black p-1;
+  }
+
+  a {
+    @apply text-blue-500;
+  }
+
+  .centered-form-field {
+    @apply col-start-4 col-end-8;
+  }
+
+  .wide-form-field {
+    @apply col-start-4 col-end-9;
+  }
+
+  .form-labels-pos {
+    @apply col-span-3 self-center place-self-end pr-4;
+  }
+
+  /* .placeholder-style {
+    @apply placeholder:pl-1;
+  } */
+
+  .checkbox-label {
+    @apply after:content-['Добавить_автора_отчёта_как_наблюдателя'] after:absolute after:w-[300px] after:left-full after:pl-1;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-thumb {
+    /* background-color: rgba(170, 170, 170, 0.5); */
+    /* border-radius: 6px; */
+    @apply bg-[rgba(170,_170,_170,_0.5)] rounded-md;
+  }
+}
