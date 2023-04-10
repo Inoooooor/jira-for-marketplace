@@ -11,7 +11,7 @@ uniqueId = `[#${uniqueId}]`
 const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const getUrl = `https://${systemDomain}/rest/api/3/project/search?expand=issueTypes`
-const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
+const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 // let getComponentsUrl = ref(null)
 const response = ref(null)
 // const JiraComponentsResponse = ref(null)
@@ -21,7 +21,7 @@ let descriptionValue = ref('')
 let issueTypeValue = ref('')
 // let componentValue = ref('')
 // let environmentOptions = ref('')
-let environmentValue = ref('')
+// let environmentValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
 
@@ -29,7 +29,7 @@ let reporterValue = ref('')
 const getQuery = async () => {
   try {
     const { data } = await HDE.request({
-      auth: 'authTest',
+      auth: 'JiraAuth',
       url: getUrl,
       method: 'GET',
       contentType: 'application/json',
@@ -61,7 +61,7 @@ const getQuery = async () => {
 //   try {
 //     makeValidCompUrl()
 //     const { data } = await HDE.request({
-//       auth: 'authTest',
+//       auth: 'JiraAuth',
 //       url: getComponentsUrl.value,
 //       method: 'GET',
 //       contentType: 'application/json',
@@ -81,7 +81,7 @@ const getQuery = async () => {
 const getReportersList = async () => {
   try {
     const { data } = await HDE.request({
-      auth: 'authTest',
+      auth: 'JiraAuth',
       url: reportersUrl,
       method: 'GET',
       contentType: 'application/json',
@@ -98,36 +98,40 @@ getReportersList()
 
 const createIssue = async () => {
   try {
-    const testCustom = 'customfield_12700'
+    // const testCustom = 'customfield_12700'
     const hdeIdList = await addIdToDescription()
     if (reporterValue.value) {
       await HDE.request({
-        auth: 'authTest',
+        auth: 'JiraAuth',
         url: createIssueUrl,
         method: 'POST',
         contentType: 'application/json',
         data: {
           fields: {
             project: {
-              key: response.value.projects[chosenProject.value].key,
+              key: response.value[chosenProject.value].key,
             },
             summary: `${summaryValue.value} ${uniqueId}`,
-            description: `${descriptionValue.value}${hdeIdList}`,
-            issuetype: {
-              name: issueTypeValue.value,
+            description: {
+              content: [
+                {
+                  content: [
+                    {
+                      text: `${descriptionValue.value}${hdeIdList}`,
+                      type: 'text',
+                    },
+                  ],
+                  type: 'paragraph',
+                },
+              ],
+              type: 'doc',
+              version: 1,
             },
-            [testCustom]: [
-              {
-                value: environmentValue.value,
-              },
-            ],
-            components: [
-              {
-                // name: componentValue.value,
-              },
-            ],
+            issuetype: {
+              id: issueTypeValue.value,
+            },
             reporter: {
-              self: reporterValue.value,
+              id: reporterValue.value,
             },
           },
         },
@@ -136,30 +140,34 @@ const createIssue = async () => {
       clearInput()
     } else {
       await HDE.request({
-        auth: 'authTest',
+        auth: 'JiraAuth',
         url: createIssueUrl,
         method: 'POST',
         contentType: 'application/json',
         data: {
           fields: {
             project: {
-              key: response.value.projects[chosenProject.value].key,
+              key: response.value[chosenProject.value].key,
             },
             summary: `${summaryValue.value} ${uniqueId}`,
-            description: `${descriptionValue.value}${hdeIdList}`,
-            issuetype: {
-              name: issueTypeValue.value,
+            description: {
+              content: [
+                {
+                  content: [
+                    {
+                      text: `${descriptionValue.value}${hdeIdList}`,
+                      type: 'text',
+                    },
+                  ],
+                  type: 'paragraph',
+                },
+              ],
+              type: 'doc',
+              version: 1,
             },
-            [testCustom]: [
-              {
-                value: environmentValue.value,
-              },
-            ],
-            components: [
-              {
-                // name: componentValue.value,
-              },
-            ],
+            issuetype: {
+              id: issueTypeValue.value,
+            },
           },
         },
       })
@@ -210,6 +218,7 @@ const valueCheck = (value) => console.log(value)
                 id="jiraProject"
                 class="centered-form-field"
                 v-model="chosenProject"
+                @change="valueCheck(response[chosenProject].key)"
               >
                 <option
                   v-for="(project, index) in response"
@@ -233,7 +242,7 @@ const valueCheck = (value) => console.log(value)
               >
                 <option
                   v-for="(issue, index) in response[chosenProject].issueTypes"
-                  :value="issue.self"
+                  :value="issue.id"
                   :key="index"
                 >
                   {{ issue.name }}
@@ -254,7 +263,7 @@ const valueCheck = (value) => console.log(value)
                   <option value="">Не определен</option>
                   <option
                     v-for="(reporter, index) in reportersList"
-                    :value="reporter.self"
+                    :value="reporter.accountId"
                     :key="index"
                   >
                     {{ reporter.displayName }}
