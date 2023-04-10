@@ -19,7 +19,7 @@ let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let issueTypeValue = ref('')
-let componentValue = ref('')
+// let componentValue = ref('')
 // let environmentOptions = ref('')
 let environmentValue = ref('')
 let reportersList = ref('')
@@ -42,9 +42,10 @@ const getQuery = async () => {
 }
 
 // const makeValidCompUrl = () => {
-//   getComponentsUrl.value = `https://${systemDomain}/rest/api/2/issue/createmeta?projectKeys=${
-//     response.value.projects[chosenProject.value].key
-//   }&issuetypeNames=${issueTypeValue.value}&expand=projects.issuetypes.fields`
+//   getComponentsUrl.value = `https://${systemDomain}/rest/api/3/project/${
+//     response.value[chosenProject.value].key
+//   }/components`
+//   console.log('link generator', response.value[chosenProject.value].key)
 // }
 
 // const getEnvironment = (fieldsObj) => {
@@ -65,14 +66,17 @@ const getQuery = async () => {
 //       method: 'GET',
 //       contentType: 'application/json',
 //     })
+//     console.log('components', data)
 //     JiraComponentsResponse.value =
 //       data.projects[0].issuetypes[0].fields.components.allowedValues
-//     const customFields = data.projects[0].issuetypes[0].fields
-//     getEnvironment(customFields)
+//     // const customFields = data.projects[0].issuetypes[0].fields
+//     // getEnvironment(customFields)
 //   } catch (error) {
 //     console.log(error)
 //   }
 // }
+
+// getComponents()
 
 const getReportersList = async () => {
   try {
@@ -119,7 +123,7 @@ const createIssue = async () => {
             ],
             components: [
               {
-                name: componentValue.value,
+                // name: componentValue.value,
               },
             ],
             reporter: {
@@ -153,7 +157,7 @@ const createIssue = async () => {
             ],
             components: [
               {
-                name: componentValue.value,
+                // name: componentValue.value,
               },
             ],
           },
@@ -170,8 +174,8 @@ const createIssue = async () => {
 const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
-  componentValue.value = ''
-  environmentValue.value = ''
+  // componentValue.value = ''
+  // environmentValue.value = ''
 }
 getQuery()
 
@@ -195,7 +199,7 @@ const valueCheck = (value) => console.log(value)
             v-if="response && true"
             @submit.prevent="createIssue()"
             action=""
-            class="grid grid-rows-10 h-full gap-2"
+            class="grid grid-rows-10 gap-2 h-full"
           >
             <div class="grid grid-cols-12">
               <label for="jiraProject" class="form-labels-pos required-field"
@@ -206,7 +210,6 @@ const valueCheck = (value) => console.log(value)
                 id="jiraProject"
                 class="centered-form-field"
                 v-model="chosenProject"
-                @change="valueCheck(chosenProject)"
               >
                 <option
                   v-for="(project, index) in response"
@@ -279,9 +282,9 @@ const valueCheck = (value) => console.log(value)
                 class="wide-form-field border-gray-500 border"
                 placeholder="Дайте здесь сводку проблемы"
                 v-model="summaryValue"
+                @input="valueCheck(summaryValue)"
               />
             </div>
-            <!--
             <div class="grid grid-cols-12">
               <label for="executor" class="form-labels-pos required-field"
                 >Описание
@@ -292,8 +295,10 @@ const valueCheck = (value) => console.log(value)
                 class="wide-form-field max-h-[200px] auto-rows-max"
                 placeholder="Опишите здесь проблему"
                 v-model="descriptionValue"
+                @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
+            <!--
             <template v-if="JiraComponentsResponse">
               <div class="grid grid-cols-12">
                 <label for="components" class="form-labels-pos required-field"
@@ -336,13 +341,14 @@ const valueCheck = (value) => console.log(value)
                 </select>
               </div>
             </template>
+            -->
             <div class="grid grid-cols-12">
               <button
                 class="col-span-2 border border-blue-500 place-self-end self-center rounded hover:bg-blue-500 hover:text-white col-start-7 p-1"
               >
                 Создать проблему
               </button>
-            </div> -->
+            </div>
           </form>
           <template v-else>
             <loadingScreen />
