@@ -10,17 +10,17 @@ let { uniqueId } = HDE.getState().ticketValues
 uniqueId = `[#${uniqueId}]`
 const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/2/user/search?query=&username=%22%22&maxResults=1000`
-const getUrl = `https://${systemDomain}/rest/api/2/issue/createmeta/`
+const getUrl = `https://${systemDomain}/rest/api/3/project/search?expand=issueTypes`
 const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
-let getComponentsUrl = ref(null)
+// let getComponentsUrl = ref(null)
 const response = ref(null)
-const JiraComponentsResponse = ref(null)
-let chosenProject = ref(16)
+// const JiraComponentsResponse = ref(null)
+let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let issueTypeValue = ref('')
 let componentValue = ref('')
-let environmentOptions = ref('')
+// let environmentOptions = ref('')
 let environmentValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
@@ -34,44 +34,45 @@ const getQuery = async () => {
       method: 'GET',
       contentType: 'application/json',
     })
-    response.value = data
+    response.value = data.values
+    console.log('проекты', response.value)
   } catch (error) {
     console.log(error)
   }
 }
 
-const makeValidCompUrl = () => {
-  getComponentsUrl.value = `https://${systemDomain}/rest/api/2/issue/createmeta?projectKeys=${
-    response.value.projects[chosenProject.value].key
-  }&issuetypeNames=${issueTypeValue.value}&expand=projects.issuetypes.fields`
-}
+// const makeValidCompUrl = () => {
+//   getComponentsUrl.value = `https://${systemDomain}/rest/api/2/issue/createmeta?projectKeys=${
+//     response.value.projects[chosenProject.value].key
+//   }&issuetypeNames=${issueTypeValue.value}&expand=projects.issuetypes.fields`
+// }
 
-const getEnvironment = (fieldsObj) => {
-  for (const key in fieldsObj) {
-    if (fieldsObj[key].name === 'Environment') {
-      environmentOptions.value = fieldsObj[key].allowedValues
-      break
-    }
-  }
-}
+// const getEnvironment = (fieldsObj) => {
+//   for (const key in fieldsObj) {
+//     if (fieldsObj[key].name === 'Environment') {
+//       environmentOptions.value = fieldsObj[key].allowedValues
+//       break
+//     }
+//   }
+// }
 
-const getComponents = async () => {
-  try {
-    makeValidCompUrl()
-    const { data } = await HDE.request({
-      auth: 'authTest',
-      url: getComponentsUrl.value,
-      method: 'GET',
-      contentType: 'application/json',
-    })
-    JiraComponentsResponse.value =
-      data.projects[0].issuetypes[0].fields.components.allowedValues
-    const customFields = data.projects[0].issuetypes[0].fields
-    getEnvironment(customFields)
-  } catch (error) {
-    console.log(error)
-  }
-}
+// const getComponents = async () => {
+//   try {
+//     makeValidCompUrl()
+//     const { data } = await HDE.request({
+//       auth: 'authTest',
+//       url: getComponentsUrl.value,
+//       method: 'GET',
+//       contentType: 'application/json',
+//     })
+//     JiraComponentsResponse.value =
+//       data.projects[0].issuetypes[0].fields.components.allowedValues
+//     const customFields = data.projects[0].issuetypes[0].fields
+//     getEnvironment(customFields)
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
 const getReportersList = async () => {
   try {
@@ -82,7 +83,7 @@ const getReportersList = async () => {
       contentType: 'application/json',
     })
     reportersList.value = data
-    console.log('АВТОРЫ', data)
+    // console.log('АВТОРЫ', data)
   } catch (error) {
     console.log(error)
   }
@@ -171,6 +172,8 @@ const clearInput = () => {
   environmentValue.value = ''
 }
 getQuery()
+
+const valueCheck = (value) => console.log(value)
 </script>
 
 <template>
@@ -201,17 +204,18 @@ getQuery()
                 id="jiraProject"
                 class="centered-form-field"
                 v-model="chosenProject"
+                @change="valueCheck(chosenProject)"
               >
                 <option
-                  v-for="(project, index) in response.projects"
+                  v-for="(project, index) in response"
                   :key="index"
-                  :value="index"
+                  :value="project.self"
                 >
                   {{ project.name }}
                 </option>
               </select>
             </div>
-            <div class="grid grid-cols-12">
+            <!-- <div class="grid grid-cols-12">
               <label for="issueType" class="form-labels-pos required-field"
                 >Тип проблемы</label
               >
@@ -232,6 +236,7 @@ getQuery()
                 </option>
               </select>
             </div>
+            
             <template v-if="reportersList">
               <div class="grid grid-cols-12">
                 <label for="author" class="form-labels-pos">Автор</label>
@@ -334,7 +339,7 @@ getQuery()
               >
                 Создать проблему
               </button>
-            </div>
+            </div> -->
           </form>
           <template v-else>
             <loadingScreen />
