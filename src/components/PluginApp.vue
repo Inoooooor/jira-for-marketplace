@@ -9,7 +9,7 @@ import loadingScreen from './loadingScreen.vue'
 let { uniqueId } = HDE.getState().ticketValues
 uniqueId = `[#${uniqueId}]`
 const { systemDomain } = HDE.vars
-const reportersUrl = `https://${systemDomain}/rest/api/2/user/search?query=&username=%22%22&maxResults=1000`
+const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const getUrl = `https://${systemDomain}/rest/api/3/project/search?expand=issueTypes`
 const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
 // let getComponentsUrl = ref(null)
@@ -82,8 +82,10 @@ const getReportersList = async () => {
       method: 'GET',
       contentType: 'application/json',
     })
-    reportersList.value = data
-    // console.log('АВТОРЫ', data)
+    reportersList.value = data.filter(
+      (user) => user.accountType === 'atlassian'
+    )
+    console.log('АВТОРЫ', reportersList.value)
   } catch (error) {
     console.log(error)
   }
@@ -235,7 +237,7 @@ const valueCheck = (value) => console.log(value)
                 </option>
               </select>
             </div>
-            <!--
+
             <template v-if="reportersList">
               <div class="grid grid-cols-12">
                 <label for="author" class="form-labels-pos">Автор</label>
@@ -244,6 +246,7 @@ const valueCheck = (value) => console.log(value)
                   name=""
                   id="author"
                   class="centered-form-field"
+                  @change="valueCheck(reporterValue)"
                 >
                   <option value="">Не определен</option>
                   <option
@@ -278,6 +281,7 @@ const valueCheck = (value) => console.log(value)
                 v-model="summaryValue"
               />
             </div>
+            <!--
             <div class="grid grid-cols-12">
               <label for="executor" class="form-labels-pos required-field"
                 >Описание
