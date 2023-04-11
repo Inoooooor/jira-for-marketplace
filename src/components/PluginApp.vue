@@ -99,6 +99,14 @@ getReportersList()
 const createIssue = async () => {
   try {
     // const testCustom = 'customfield_12700'
+    if (
+      !summaryValue.value ||
+      !issueTypeValue.value ||
+      !descriptionValue.value
+    ) {
+      alert('Заполните все поля')
+      return
+    }
     const hdeIdList = await addIdToDescription()
     if (reporterValue.value) {
       await HDE.request({
