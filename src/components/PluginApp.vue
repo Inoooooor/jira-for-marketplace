@@ -148,42 +148,6 @@ const createIssue = async () => {
     })
     alert('Задача создана успешно!')
     clearInput()
-    // } else {
-    //   await HDE.request({
-    //     auth: 'JiraAuth',
-    //     url: createIssueUrl,
-    //     method: 'POST',
-    //     contentType: 'application/json',
-    //     data: {
-    //       fields: {
-    //         project: {
-    //           key: response.value[chosenProject.value].key,
-    //         },
-    //         summary: `${summaryValue.value} ${uniqueId}`,
-    //         description: {
-    //           content: [
-    //             {
-    //               content: [
-    //                 {
-    //                   text: `${descriptionValue.value}${hdeIdList}`,
-    //                   type: 'text',
-    //                 },
-    //               ],
-    //               type: 'paragraph',
-    //             },
-    //           ],
-    //           type: 'doc',
-    //           version: 1,
-    //         },
-    //         issuetype: {
-    //           id: issueTypeValue.value,
-    //         },
-    //       },
-    //     },
-    //   })
-    //   alert('Задача создана успешно!')
-    //   clearInput()
-    // }
   } catch (error) {
     console.log(error)
   }
@@ -197,6 +161,25 @@ const clearInput = () => {
 }
 getQuery()
 
+const testCustomFields = async () => {
+  try {
+    const { data } = await HDE.request({
+      auth: 'JiraAuth',
+      url: 'https://hasan26.atlassian.net/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields',
+      method: 'GET',
+      contentType: 'application/json',
+    })
+    console.log(
+      'КАСТОМ ПОЛЯ',
+      Object.values(data.projects[0].issuetypes[5].fields).filter(
+        (field) => field.required === true
+      )
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+testCustomFields()
 const valueCheck = (value) => console.log(value)
 </script>
 
