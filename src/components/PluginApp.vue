@@ -108,80 +108,82 @@ const createIssue = async () => {
       return
     }
     const hdeIdList = await addIdToDescription()
-    if (reporterValue.value) {
-      await HDE.request({
-        auth: 'JiraAuth',
-        url: createIssueUrl,
-        method: 'POST',
-        contentType: 'application/json',
-        data: {
-          fields: {
-            project: {
-              key: response.value[chosenProject.value].key,
-            },
-            summary: `${summaryValue.value} ${uniqueId}`,
-            description: {
-              content: [
-                {
-                  content: [
-                    {
-                      text: `${descriptionValue.value}${hdeIdList}`,
-                      type: 'text',
-                    },
-                  ],
-                  type: 'paragraph',
-                },
-              ],
-              type: 'doc',
-              version: 1,
-            },
-            issuetype: {
-              id: issueTypeValue.value,
-            },
-            reporter: {
-              id: reporterValue.value,
-            },
+    // if (reporterValue.value) {
+    await HDE.request({
+      auth: 'JiraAuth',
+      url: createIssueUrl,
+      method: 'POST',
+      contentType: 'application/json',
+      data: {
+        fields: {
+          project: {
+            key: response.value[chosenProject.value].key,
           },
-        },
-      })
-      alert('Задача создана успешно!')
-      clearInput()
-    } else {
-      await HDE.request({
-        auth: 'JiraAuth',
-        url: createIssueUrl,
-        method: 'POST',
-        contentType: 'application/json',
-        data: {
-          fields: {
-            project: {
-              key: response.value[chosenProject.value].key,
-            },
-            summary: `${summaryValue.value} ${uniqueId}`,
-            description: {
-              content: [
-                {
-                  content: [
-                    {
-                      text: `${descriptionValue.value}${hdeIdList}`,
-                      type: 'text',
-                    },
-                  ],
-                  type: 'paragraph',
-                },
-              ],
-              type: 'doc',
-              version: 1,
-            },
-            issuetype: {
-              id: issueTypeValue.value,
-            },
+          summary: `${summaryValue.value} ${uniqueId}`,
+          description: {
+            content: [
+              {
+                content: [
+                  {
+                    text: `${descriptionValue.value}${hdeIdList}`,
+                    type: 'text',
+                  },
+                ],
+                type: 'paragraph',
+              },
+            ],
+            type: 'doc',
+            version: 1,
           },
+          issuetype: {
+            id: issueTypeValue.value,
+          },
+          reporter: reporterValue.value
+            ? {
+                id: reporterValue.value,
+              }
+            : null,
         },
-      })
-      alert('Задача создана успешно!')
-      clearInput()
-    }
+      },
+    })
+    alert('Задача создана успешно!')
+    clearInput()
+    // } else {
+    //   await HDE.request({
+    //     auth: 'JiraAuth',
+    //     url: createIssueUrl,
+    //     method: 'POST',
+    //     contentType: 'application/json',
+    //     data: {
+    //       fields: {
+    //         project: {
+    //           key: response.value[chosenProject.value].key,
+    //         },
+    //         summary: `${summaryValue.value} ${uniqueId}`,
+    //         description: {
+    //           content: [
+    //             {
+    //               content: [
+    //                 {
+    //                   text: `${descriptionValue.value}${hdeIdList}`,
+    //                   type: 'text',
+    //                 },
+    //               ],
+    //               type: 'paragraph',
+    //             },
+    //           ],
+    //           type: 'doc',
+    //           version: 1,
+    //         },
+    //         issuetype: {
+    //           id: issueTypeValue.value,
+    //         },
+    //       },
+    //     },
+    //   })
+    //   alert('Задача создана успешно!')
+    //   clearInput()
+    // }
   } catch (error) {
     console.log(error)
   }
