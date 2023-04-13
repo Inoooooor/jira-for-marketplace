@@ -10,7 +10,7 @@ let { uniqueId } = HDE.getState().ticketValues
 uniqueId = `[#${uniqueId}]`
 const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
-const getUrl = `https://${systemDomain}/rest/api/3/project/search?expand=issueTypes`
+const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 // let getComponentsUrl = ref(null)
 const response = ref(null)
@@ -45,7 +45,7 @@ const getQuery = async () => {
       method: 'GET',
       contentType: 'application/json',
     })
-    response.value = data.values
+    response.value = data.projects
     console.log('проекты', response.value)
   } catch (error) {
     console.log(error)
@@ -259,7 +259,7 @@ const valueCheck = (value) => {
                 @change="valueCheck(chosenIssueTypeIndex)"
               >
                 <option
-                  v-for="(issue, index) in response[chosenProject].issueTypes"
+                  v-for="(issue, index) in response[chosenProject].issuetypes"
                   :value="index"
                   :key="index"
                 >
