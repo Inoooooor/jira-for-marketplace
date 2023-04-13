@@ -18,12 +18,15 @@ const response = ref(null)
 let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
-let issueTypeValue = ref('')
+// let issueTypeValue = ref('')
 // let componentValue = ref('')
 // let environmentOptions = ref('')
 // let environmentValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
+
+const dataForFields = ref(null)
+const chosenIssueTypeIndex = ref(0)
 
 //functions
 const getQuery = async () => {
@@ -99,11 +102,7 @@ getReportersList()
 const createIssue = async () => {
   try {
     // const testCustom = 'customfield_12700'
-    if (
-      !summaryValue.value ||
-      !issueTypeValue.value ||
-      !descriptionValue.value
-    ) {
+    if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
       return
     }
@@ -136,7 +135,9 @@ const createIssue = async () => {
             version: 1,
           },
           issuetype: {
-            id: issueTypeValue.value,
+            id: response.value[chosenProject.value].issueTypes[
+              chosenIssueTypeIndex.value
+            ].id,
           },
           reporter: reporterValue.value
             ? {
@@ -156,8 +157,6 @@ const createIssue = async () => {
 const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
-  // componentValue.value = ''
-  // environmentValue.value = ''
 }
 getQuery()
 
@@ -169,6 +168,8 @@ const testCustomFields = async () => {
       method: 'GET',
       contentType: 'application/json',
     })
+    console.log('createmeta', data)
+    dataForFields.value = data
     console.log(
       'КАСТОМ ПОЛЯ',
       Object.values(data.projects[0].issuetypes[5].fields).filter(
@@ -180,7 +181,20 @@ const testCustomFields = async () => {
   }
 }
 testCustomFields()
-const valueCheck = (value) => console.log(value)
+const valueCheck = (value) => {
+  console.log(value)
+  // console.log(
+  //   'ISSUE INDEX',
+  //   response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
+  //     .id
+  // )
+  console.table([
+    summaryValue.value,
+    response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
+      .id,
+    descriptionValue.value,
+  ])
+}
 </script>
 
 <template>
@@ -230,12 +244,12 @@ const valueCheck = (value) => console.log(value)
                 name=""
                 id="issueType"
                 class="centered-form-field"
-                v-model="issueTypeValue"
-                @change="valueCheck(issueTypeValue)"
+                v-model="chosenIssueTypeIndex"
+                @change="valueCheck(chosenIssueTypeIndex)"
               >
                 <option
                   v-for="(issue, index) in response[chosenProject].issueTypes"
-                  :value="issue.id"
+                  :value="index"
                   :key="index"
                 >
                   {{ issue.name }}
@@ -300,6 +314,19 @@ const valueCheck = (value) => console.log(value)
                 @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
+            <template v-if="dataForFields">
+              <div
+                class="grid grid-cols-12"
+                v-for="index in dataForFields.projects[chosenProject]
+                  .issuetypes[chosenIssueTypeIndex].fields"
+                :key="index"
+              >
+                <input
+                  type="text"
+                  class="wide-form-field border-gray-500 border"
+                />
+              </div>
+            </template>
             <!--
             <template v-if="JiraComponentsResponse">
               <div class="grid grid-cols-12">
