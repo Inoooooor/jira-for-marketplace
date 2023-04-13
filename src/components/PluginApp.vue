@@ -30,10 +30,16 @@ const chosenIssueTypeIndex = ref(0)
 
 const fieldsList = computed(() =>
   Object.values(
-    dataForFields.value.projects[chosenProject.value].issuetypes[
-      chosenIssueTypeIndex.value
-    ].fields
-  ).filter((field) => field.required === true)
+    response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
+      .fields
+  ).filter(
+    (field) =>
+      field.required === true &&
+      field.key !== 'summary' &&
+      field.key !== 'description' &&
+      field.key !== 'issuetype' &&
+      field.key !== 'project'
+  )
 )
 
 //functions
@@ -190,6 +196,12 @@ const testCustomFields = async () => {
   }
 }
 testCustomFields()
+
+// избегание ошибки отрисовки несуществующего типа проблемы
+const zerofier = () => {
+  chosenIssueTypeIndex.value = 0
+}
+
 const valueCheck = (value) => {
   console.log(value)
   // console.log(
@@ -236,7 +248,7 @@ const valueCheck = (value) => {
                 id="jiraProject"
                 class="centered-form-field"
                 v-model="chosenProject"
-                @change="valueCheck(response[chosenProject].key)"
+                @change="zerofier()"
               >
                 <option
                   v-for="(project, index) in response"
@@ -325,18 +337,20 @@ const valueCheck = (value) => {
                 @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
-            <template v-if="dataForFields">
-              <div
-                class="grid grid-cols-12"
-                v-for="index in fieldsList"
-                :key="index"
-              >
-                <input
-                  type="text"
-                  class="wide-form-field border-gray-500 border"
-                />
-              </div>
-            </template>
+            <div
+              class="grid grid-cols-12"
+              v-for="(field, index) in fieldsList"
+              :key="index"
+            >
+              <label :for="field.key" class="form-labels-pos required-field">{{
+                field.name
+              }}</label>
+              <input
+                :id="field.key"
+                type="text"
+                class="wide-form-field border-gray-500 border"
+              />
+            </div>
             <!--
             <template v-if="JiraComponentsResponse">
               <div class="grid grid-cols-12">
