@@ -1,6 +1,6 @@
 <script setup>
 import HDE from '../plugin'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import bindIssuesTab from './bindIssueTab.vue'
 import { addIdToDescription } from '../controllers/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
@@ -27,6 +27,14 @@ let reporterValue = ref('')
 
 const dataForFields = ref(null)
 const chosenIssueTypeIndex = ref(0)
+
+const fieldsList = computed(() =>
+  Object.values(
+    dataForFields.value.projects[chosenProject.value].issuetypes[
+      chosenIssueTypeIndex.value
+    ].fields
+  ).filter((field) => field.required === true)
+)
 
 //functions
 const getQuery = async () => {
@@ -170,6 +178,7 @@ const testCustomFields = async () => {
     })
     console.log('createmeta', data)
     dataForFields.value = data
+    console.log('raw', data)
     console.log(
       'КАСТОМ ПОЛЯ',
       Object.values(data.projects[0].issuetypes[5].fields).filter(
@@ -184,16 +193,18 @@ testCustomFields()
 const valueCheck = (value) => {
   console.log(value)
   // console.log(
-  //   'ISSUE INDEX',
-  //   response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
-  //     .id
+  //   Object.values(
+  //     dataForFields.value.projects[chosenProject.value].issuetypes[
+  //       chosenIssueTypeIndex.value
+  //     ].fields
+  //   ).filter((field) => field.required === true)
   // )
-  console.table([
-    summaryValue.value,
-    response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
-      .id,
-    descriptionValue.value,
-  ])
+  // console.table([
+  //   summaryValue.value,
+  //   response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
+  //     .id,
+  //   descriptionValue.value,
+  // ])
 }
 </script>
 
@@ -317,8 +328,7 @@ const valueCheck = (value) => {
             <template v-if="dataForFields">
               <div
                 class="grid grid-cols-12"
-                v-for="index in dataForFields.projects[chosenProject]
-                  .issuetypes[chosenIssueTypeIndex].fields"
+                v-for="index in fieldsList"
                 :key="index"
               >
                 <input
