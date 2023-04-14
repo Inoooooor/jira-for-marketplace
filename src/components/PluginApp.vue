@@ -12,18 +12,14 @@ const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
-// let getComponentsUrl = ref(null)
 const response = ref(null)
-// const JiraComponentsResponse = ref(null)
 let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
-// let issueTypeValue = ref('')
-// let componentValue = ref('')
-// let environmentOptions = ref('')
-// let environmentValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
+
+const customFieldsValues = ref([])
 
 const dataForFields = ref(null)
 const chosenIssueTypeIndex = ref(0)
@@ -200,10 +196,11 @@ testCustomFields()
 // избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
   chosenIssueTypeIndex.value = 0
+  customFieldsValues.value.length = 0
 }
 
 const valueCheck = (value) => {
-  console.log(value)
+  console.table(value)
   // console.log(
   //   Object.values(
   //     dataForFields.value.projects[chosenProject.value].issuetypes[
@@ -346,6 +343,8 @@ const valueCheck = (value) => {
                 field.name
               }}</label>
               <input
+                v-model="customFieldsValues[index]"
+                @input="valueCheck(customFieldsValues)"
                 :id="field.key"
                 type="text"
                 class="wide-form-field border-gray-500 border"
