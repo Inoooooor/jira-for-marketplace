@@ -108,10 +108,61 @@ const getReportersList = async () => {
   }
 }
 getReportersList()
-
+const createIssueDataMaker = () => {
+  const customFieldsArr = Object.values(
+    response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
+      .fields
+  ).filter(
+    (field) =>
+      field.required === true &&
+      field.key !== 'summary' &&
+      field.key !== 'description' &&
+      field.key !== 'issuetype' &&
+      field.key !== 'project'
+  )
+  console.log('in func', customFieldsArr)
+  const basicFieldsObj = {
+    project: {
+      key: 'response.value[chosenProject.value].key',
+    },
+    summary: '${summaryValue.value} ${uniqueId}',
+    description: {
+      content: [
+        {
+          content: [
+            {
+              text: '${descriptionValue.value}',
+              type: 'text',
+            },
+          ],
+          type: 'paragraph',
+        },
+      ],
+      type: 'doc',
+      version: 1,
+    },
+    issuetype: {
+      id: `response.value[chosenProject.value].issueTypes[
+        chosenIssueTypeIndex.value
+      ].id`,
+    },
+    reporter: `reporterValue.value
+      ? {
+          id: reporterValue.value,
+        }
+      : null`,
+  }
+  console.log('before', basicFieldsObj)
+  customFieldsArr.forEach(
+    (field, index) =>
+      (basicFieldsObj[field.key] = customFieldsValues.value[index])
+  )
+  console.log('after', basicFieldsObj)
+}
 const createIssue = async () => {
+  createIssueDataMaker()
+
   try {
-    // const testCustom = 'customfield_12700'
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
       return
@@ -201,6 +252,19 @@ const zerofier = () => {
 
 const valueCheck = (value) => {
   console.table(value)
+  console.log(
+    Object.values(
+      response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
+        .fields
+    ).filter(
+      (field) =>
+        field.required === true &&
+        field.key !== 'summary' &&
+        field.key !== 'description' &&
+        field.key !== 'issuetype' &&
+        field.key !== 'project'
+    )
+  )
   // console.log(
   //   Object.values(
   //     dataForFields.value.projects[chosenProject.value].issuetypes[
