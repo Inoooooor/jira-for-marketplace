@@ -108,7 +108,7 @@ const getReportersList = async () => {
   }
 }
 getReportersList()
-const createIssueDataMaker = () => {
+const createIssueDataMaker = (hdeIdList) => {
   const customFieldsArr = Object.values(
     response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
       .fields
@@ -123,15 +123,15 @@ const createIssueDataMaker = () => {
   console.log('in func', customFieldsArr)
   const basicFieldsObj = {
     project: {
-      key: 'response.value[chosenProject.value].key',
+      key: response.value[chosenProject.value].key,
     },
-    summary: '${summaryValue.value} ${uniqueId}',
+    summary: `${summaryValue.value} ${uniqueId}`,
     description: {
       content: [
         {
           content: [
             {
-              text: '${descriptionValue.value}',
+              text: `${descriptionValue.value}${hdeIdList}`,
               type: 'text',
             },
           ],
@@ -142,15 +142,15 @@ const createIssueDataMaker = () => {
       version: 1,
     },
     issuetype: {
-      id: `response.value[chosenProject.value].issueTypes[
+      id: response.value[chosenProject.value].issuetypes[
         chosenIssueTypeIndex.value
-      ].id`,
+      ].id,
     },
-    reporter: `reporterValue.value
+    reporter: reporterValue.value
       ? {
           id: reporterValue.value,
         }
-      : null`,
+      : null,
   }
   console.log('before', basicFieldsObj)
   customFieldsArr.forEach(
@@ -158,10 +158,9 @@ const createIssueDataMaker = () => {
       (basicFieldsObj[field.key] = customFieldsValues.value[index])
   )
   console.log('after', basicFieldsObj)
+  return basicFieldsObj
 }
 const createIssue = async () => {
-  createIssueDataMaker()
-
   try {
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
@@ -169,45 +168,16 @@ const createIssue = async () => {
     }
     const hdeIdList = await addIdToDescription()
     // if (reporterValue.value) {
-    await HDE.request({
+    const { data } = await HDE.request({
       auth: 'JiraAuth',
       url: createIssueUrl,
       method: 'POST',
       contentType: 'application/json',
       data: {
-        fields: {
-          project: {
-            key: response.value[chosenProject.value].key,
-          },
-          summary: `${summaryValue.value} ${uniqueId}`,
-          description: {
-            content: [
-              {
-                content: [
-                  {
-                    text: `${descriptionValue.value}${hdeIdList}`,
-                    type: 'text',
-                  },
-                ],
-                type: 'paragraph',
-              },
-            ],
-            type: 'doc',
-            version: 1,
-          },
-          issuetype: {
-            id: response.value[chosenProject.value].issueTypes[
-              chosenIssueTypeIndex.value
-            ].id,
-          },
-          reporter: reporterValue.value
-            ? {
-                id: reporterValue.value,
-              }
-            : null,
-        },
+        fields: createIssueDataMaker(hdeIdList),
       },
     })
+    console.log('POST DATA', data)
     alert('Задача создана успешно!')
     clearInput()
   } catch (error) {
@@ -218,6 +188,7 @@ const createIssue = async () => {
 const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
+  customFieldsValues.value.length = 0
 }
 getQuery()
 
