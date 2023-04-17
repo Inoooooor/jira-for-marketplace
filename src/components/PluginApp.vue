@@ -179,6 +179,10 @@ const createIssue = async () => {
       },
     })
     console.log('POST DATA', data)
+    if (data.errors) {
+      alert(JSON.stringify(data.errors))
+      return
+    }
     alert('Задача создана успешно!')
     clearInput()
   } catch (error) {
