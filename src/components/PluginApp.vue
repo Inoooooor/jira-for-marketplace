@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import bindIssuesTab from './bindIssueTab.vue'
 import { addIdToDescription } from '../controllers/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
+import customFieldsGenerator from './customFieldsGenerator.vue'
 
 // variables
 let { uniqueId } = HDE.getState().ticketValues
@@ -250,6 +251,12 @@ const valueCheck = (value) => {
   //   descriptionValue.value,
   // ])
 }
+
+const fillValuesFromFields = (emittedFieldsArray) => {
+  customFieldsValues.value = emittedFieldsArray
+  // console.log(emittedFieldsArray)
+  console.table(customFieldsValues.value)
+}
 </script>
 
 <template>
@@ -369,14 +376,14 @@ const valueCheck = (value) => {
                 @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
-            <div
+            <!-- <div
               class="grid grid-cols-12"
               v-for="(field, index) in fieldsList"
               :key="index"
             >
-              <label :for="field.key" class="form-labels-pos required-field">{{
-                field.name
-              }}</label>
+              <label :for="field.key" class="form-labels-pos required-field"
+                >{{ field.name }} {{ field.schema.type }}</label
+              >
               <input
                 v-model="customFieldsValues[index]"
                 @input="valueCheck(customFieldsValues)"
@@ -384,7 +391,11 @@ const valueCheck = (value) => {
                 type="text"
                 class="wide-form-field border-gray-500 border"
               />
-            </div>
+            </div> -->
+            <customFieldsGenerator
+              :fieldsList="fieldsList"
+              @input-change="fillValuesFromFields($event)"
+            />
             <!--
             <template v-if="JiraComponentsResponse">
               <div class="grid grid-cols-12">
