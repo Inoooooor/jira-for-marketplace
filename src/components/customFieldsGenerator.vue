@@ -19,13 +19,40 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
     <label :for="field.key" class="form-labels-pos required-field"
       >{{ field.name }} {{ field.schema.type }}</label
     >
-    <input
-      :id="field.key"
-      type="text"
-      class="wide-form-field border border-gray-300 rounded"
-      @input="inputChange()"
-      v-model="FieldsValues[index]"
-    />
+    <template v-if="field.schema.type === 'string'">
+      <input
+        :id="field.key"
+        type="text"
+        class="wide-form-field border border-gray-300 rounded"
+        @input="inputChange()"
+        v-model="FieldsValues[index]"
+      />
+    </template>
+    <template v-else-if="field.schema.type === 'number'">
+      <input
+        :id="field.key"
+        type="number"
+        class="wide-form-field border border-gray-300 rounded"
+        @input="inputChange()"
+        v-model="FieldsValues[index]"
+      />
+    </template>
+    <template v-else-if="field.schema.type === 'option'">
+      <select
+        :id="field.key"
+        class="wide-form-field border border-gray-300 rounded"
+        @change="inputChange()"
+        v-model="FieldsValues[index]"
+      >
+        <option
+          v-for="(option, index) in field.allowedValues"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.value }}
+        </option>
+      </select>
+    </template>
   </div>
 </template>
 <style lang=""></style>

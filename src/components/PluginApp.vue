@@ -107,10 +107,13 @@ const createIssueDataMaker = (hdeIdList) => {
       : null,
   }
   console.log('before', basicFieldsObj)
-  customFieldsArr.forEach(
-    (field, index) =>
-      (basicFieldsObj[field.key] = customFieldsValues.value[index])
-  )
+  customFieldsArr.forEach((field, index) => {
+    if (field.schema.type === 'option') {
+      basicFieldsObj[field.key] = { value: customFieldsValues.value[index] }
+      return
+    }
+    basicFieldsObj[field.key] = customFieldsValues.value[index]
+  })
   console.log('after', basicFieldsObj)
   return basicFieldsObj
 }
