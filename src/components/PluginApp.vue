@@ -110,17 +110,7 @@ const getReportersList = async () => {
 }
 getReportersList()
 const createIssueDataMaker = (hdeIdList) => {
-  const customFieldsArr = Object.values(
-    response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
-      .fields
-  ).filter(
-    (field) =>
-      field.required === true &&
-      field.key !== 'summary' &&
-      field.key !== 'description' &&
-      field.key !== 'issuetype' &&
-      field.key !== 'project'
-  )
+  const customFieldsArr = fieldsList.value
   console.log('in func', customFieldsArr)
   const basicFieldsObj = {
     project: {
@@ -224,6 +214,9 @@ testCustomFields()
 const zerofier = () => {
   chosenIssueTypeIndex.value = 0
   customFieldsValues.value.length = 0
+  // console.log('task index', chosenIssueTypeIndex.value)
+  // console.log('proj index', chosenProject.value)
+  console.log(fieldsList.value)
 }
 
 const valueCheck = (value) => {
