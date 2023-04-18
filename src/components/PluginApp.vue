@@ -2,27 +2,25 @@
 import HDE from '../plugin'
 import { ref, computed } from 'vue'
 import bindIssuesTab from './bindIssueTab.vue'
-import { addIdToDescription } from '../controllers/idToJiraDescription.js'
+import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
 
 // variables
-let { uniqueId } = HDE.getState().ticketValues
-uniqueId = `[#${uniqueId}]`
+const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
+
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
+
 const response = ref(null)
 let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
-
 const customFieldsValues = ref([])
-
-const dataForFields = ref(null)
 const chosenIssueTypeIndex = ref(0)
 
 const fieldsList = computed(() =>
@@ -55,43 +53,6 @@ const getQuery = async () => {
   }
 }
 
-// const makeValidCompUrl = () => {
-//   getComponentsUrl.value = `https://${systemDomain}/rest/api/3/project/${
-//     response.value[chosenProject.value].key
-//   }/components`
-//   console.log('link generator', response.value[chosenProject.value].key)
-// }
-
-// const getEnvironment = (fieldsObj) => {
-//   for (const key in fieldsObj) {
-//     if (fieldsObj[key].name === 'Environment') {
-//       environmentOptions.value = fieldsObj[key].allowedValues
-//       break
-//     }
-//   }
-// }
-
-// const getComponents = async () => {
-//   try {
-//     makeValidCompUrl()
-//     const { data } = await HDE.request({
-//       auth: 'JiraAuth',
-//       url: getComponentsUrl.value,
-//       method: 'GET',
-//       contentType: 'application/json',
-//     })
-//     console.log('components', data)
-//     JiraComponentsResponse.value =
-//       data.projects[0].issuetypes[0].fields.components.allowedValues
-//     // const customFields = data.projects[0].issuetypes[0].fields
-//     // getEnvironment(customFields)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// getComponents()
-
 const getReportersList = async () => {
   try {
     const { data } = await HDE.request({
@@ -108,7 +69,9 @@ const getReportersList = async () => {
     console.log(error)
   }
 }
+
 getReportersList()
+
 const createIssueDataMaker = (hdeIdList) => {
   const customFieldsArr = fieldsList.value
   console.log('in func', customFieldsArr)
@@ -151,6 +114,7 @@ const createIssueDataMaker = (hdeIdList) => {
   console.log('after', basicFieldsObj)
   return basicFieldsObj
 }
+
 const createIssue = async () => {
   try {
     if (!summaryValue.value || !descriptionValue.value) {
@@ -158,7 +122,6 @@ const createIssue = async () => {
       return
     }
     const hdeIdList = await addIdToDescription()
-    // if (reporterValue.value) {
     const { data } = await HDE.request({
       auth: 'JiraAuth',
       url: createIssueUrl,
@@ -185,32 +148,10 @@ const clearInput = () => {
   descriptionValue.value = ''
   customFieldsValues.value.length = 0
 }
+
 getQuery()
 
-const testCustomFields = async () => {
-  try {
-    const { data } = await HDE.request({
-      auth: 'JiraAuth',
-      url: 'https://hasan26.atlassian.net/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields',
-      method: 'GET',
-      contentType: 'application/json',
-    })
-    console.log('createmeta', data)
-    dataForFields.value = data
-    console.log('raw', data)
-    console.log(
-      'КАСТОМ ПОЛЯ',
-      Object.values(data.projects[0].issuetypes[5].fields).filter(
-        (field) => field.required === true
-      )
-    )
-  } catch (error) {
-    console.log(error)
-  }
-}
-testCustomFields()
-
-// избегание ошибки отрисовки несуществующего типа проблемы
+// Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
   chosenIssueTypeIndex.value = 0
   customFieldsValues.value.length = 0
@@ -234,19 +175,6 @@ const valueCheck = (value) => {
         field.key !== 'project'
     )
   )
-  // console.log(
-  //   Object.values(
-  //     dataForFields.value.projects[chosenProject.value].issuetypes[
-  //       chosenIssueTypeIndex.value
-  //     ].fields
-  //   ).filter((field) => field.required === true)
-  // )
-  // console.table([
-  //   summaryValue.value,
-  //   response.value[chosenProject.value].issueTypes[chosenIssueTypeIndex.value]
-  //     .id,
-  //   descriptionValue.value,
-  // ])
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
@@ -373,22 +301,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
-            <!-- <div
-              class="grid grid-cols-12"
-              v-for="(field, index) in fieldsList"
-              :key="index"
-            >
-              <label :for="field.key" class="form-labels-pos required-field"
-                >{{ field.name }} {{ field.schema.type }}</label
-              >
-              <input
-                v-model="customFieldsValues[index]"
-                @input="valueCheck(customFieldsValues)"
-                :id="field.key"
-                type="text"
-                class="wide-form-field border-gray-500 border"
-              />
-            </div> -->
             <customFieldsGenerator
               :fieldsList="fieldsList"
               @input-change="fillValuesFromFields($event)"
