@@ -127,6 +127,7 @@ const createIssueDataMaker = (hdeIdList) => {
 }
 
 const createIssue = async () => {
+  debugCreateTask()
   try {
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
@@ -158,6 +159,60 @@ const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
   customFieldsValues.value.length = 0
+}
+
+const debugCreateTask = async () => {
+  try {
+    alert('DEBUG')
+    const { data } = await HDE.request({
+      auth: 'JiraAuth',
+      url: createIssueUrl,
+      method: 'POST',
+      contentType: 'application/json',
+      data: {
+        fields: {
+          project: {
+            key: 'YL2',
+          },
+          summary: 'debug',
+          description: {
+            content: [
+              {
+                content: [
+                  {
+                    text: 'debug',
+                    type: 'text',
+                  },
+                ],
+                type: 'paragraph',
+              },
+            ],
+            type: 'doc',
+            version: 1,
+          },
+          issuetype: {
+            id: 10005,
+          },
+          reporter: reporterValue.value
+            ? {
+                id: reporterValue.value,
+              }
+            : null,
+          customfield_10037: '666666s',
+          customfield_10041: { value: '#1' },
+        },
+      },
+    })
+    console.log('POST DATA', data)
+    if (data.errors) {
+      alert(JSON.stringify(data.errors))
+      return
+    }
+    alert('Задача создана успешно!')
+    clearInput()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 getQuery()
