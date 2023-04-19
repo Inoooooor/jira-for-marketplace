@@ -112,6 +112,13 @@ const createIssueDataMaker = (hdeIdList) => {
       basicFieldsObj[field.key] = { value: customFieldsValues.value[index] }
       return
     }
+
+    // Добавил в конец строки пустой символ. Jira отказывается принимать в строку число,
+    // которое является строкой, но работает с любым числом в котором есть любой символ
+    if (field.schema.type === 'string') {
+      basicFieldsObj[field.key] = customFieldsValues.value[index] + 'ㅤ'
+      return
+    }
     basicFieldsObj[field.key] = customFieldsValues.value[index]
   })
   console.log('after', basicFieldsObj)

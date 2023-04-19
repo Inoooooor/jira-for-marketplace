@@ -8,6 +8,8 @@ const emit = defineEmits(['inputChange'])
 
 const FieldsValues = ref([])
 
+// const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
+
 const inputChange = () => emit('inputChange', FieldsValues.value)
 </script>
 <template>
