@@ -34,6 +34,7 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
       <input
         :id="field.key"
         type="number"
+        step="0.0001"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
         v-model="FieldsValues[index]"
