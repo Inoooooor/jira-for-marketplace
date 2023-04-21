@@ -56,6 +56,15 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
         v-model="FieldsValues[index]"
       />
     </template>
+    <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
+      <input
+        :id="field.key"
+        type="date"
+        class="wide-form-field border border-gray-300 rounded"
+        @input="inputChange()"
+        v-model="FieldsValues[index]"
+      />
+    </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
         :id="field.key"
