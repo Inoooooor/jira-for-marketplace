@@ -1,6 +1,7 @@
 <script setup>
 // const childDebugger = () => console.log('child')
 import { ref } from 'vue'
+import { TYPE_BASE } from '../config/configs'
 
 defineProps(['fieldsList'])
 
@@ -8,6 +9,7 @@ const emit = defineEmits(['inputChange'])
 
 const FieldsValues = ref([])
 
+// const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 // const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
 
 const inputChange = () => emit('inputChange', FieldsValues.value)
@@ -21,7 +23,7 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
     <label :for="field.key" class="form-labels-pos required-field"
       >{{ field.name }} {{ field.schema.type }}</label
     >
-    <template v-if="field.schema.type === 'string'">
+    <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
       <input
         :id="field.key"
         type="text"
@@ -30,7 +32,20 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
         v-model="FieldsValues[index]"
       />
     </template>
-    <template v-else-if="field.schema.type === 'number'">
+    <template v-if="field.schema.custom === TYPE_BASE + 'url'">
+      <input
+        :id="field.key"
+        type="url"
+        pattern="https://.*"
+        placeholder="https://example.com"
+        required
+        maxlength="80"
+        class="wide-form-field border border-gray-300 rounded"
+        @input="inputChange()"
+        v-model="FieldsValues[index]"
+      />
+    </template>
+    <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
       <input
         :id="field.key"
         type="number"
@@ -41,7 +56,7 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
         v-model="FieldsValues[index]"
       />
     </template>
-    <template v-else-if="field.schema.type === 'option'">
+    <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
         :id="field.key"
         class="wide-form-field border border-gray-300 rounded"
