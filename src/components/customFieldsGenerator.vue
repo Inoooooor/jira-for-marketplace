@@ -2,17 +2,17 @@
 // const childDebugger = () => console.log('child')
 import { ref } from 'vue'
 import { TYPE_BASE } from '../config/configs'
+import selectDropBox from './selectDropBox.vue'
 
 defineProps(['fieldsList'])
 
 const emit = defineEmits(['inputChange'])
+const inputChange = () => emit('inputChange', FieldsValues.value)
 
 const FieldsValues = ref([])
 
 // const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 // const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
-
-const inputChange = () => emit('inputChange', FieldsValues.value)
 </script>
 <template>
   <div
@@ -80,6 +80,9 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
           {{ option.value }}
         </option>
       </select>
+    </template>
+    <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
+      <selectDropBox />
     </template>
   </div>
 </template>
