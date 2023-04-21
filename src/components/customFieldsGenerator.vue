@@ -82,7 +82,7 @@ const FieldsValues = ref([])
       </select>
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
-      <selectDropBox />
+      <selectDropBox :checkBoxFields="field.allowedValues" />
     </template>
   </div>
 </template>

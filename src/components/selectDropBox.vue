@@ -5,6 +5,9 @@
 //     checkList.classList.remove('visible')
 //   else checkList.classList.add('visible')
 // }
+
+defineProps(['checkBoxFields'])
+
 const dropDownToggle = () => {
   const checkList = document.getElementById('list1')
   if (checkList.classList.contains('visible'))
@@ -16,12 +19,17 @@ const dropDownToggle = () => {
   <div id="list1" class="dropdown-check-list" tabindex="100">
     <span class="anchor" @click="dropDownToggle()">Select Fruits</span>
     <ul class="items">
+      <li v-for="(option, index) in checkBoxFields" :key="index">
+        <input type="checkbox" name="" id="" />
+        {{ option.value }}
+        {{ option.id }}
+      </li>
+      <!-- <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
+      <li><input type="checkbox" />Apple</li> -->
     </ul>
   </div>
 </template>
