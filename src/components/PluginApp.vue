@@ -114,7 +114,7 @@ const createIssueDataMaker = (hdeIdList) => {
       }
       return
     }
-    // Добавил в конец строки пустой символ. Jira отказывается принимать в строку число,
+    // Добавил в конец строки пустой символ. HDE request отказывается принимать в строку число,
     // которое является строкой, но работает с любым числом в котором есть любой символ
     else if (field.schema.type === 'string') {
       basicFieldsObj[field.key] = customFieldsValues.value[index] + 'ㅤ'
@@ -132,7 +132,7 @@ const createIssueDataMaker = (hdeIdList) => {
 
 const createIssue = async () => {
   try {
-    // debugCreateTask()
+    debugCreateTask()
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
       return
@@ -165,63 +165,65 @@ const clearInput = () => {
   customFieldsValues.value.length = 0
 }
 
-// const debugCreateTask = async () => {
-//   try {
-//     alert('DEBUG')
-//     const { data } = await HDE.request({
-//       auth: 'JiraAuth',
-//       url: createIssueUrl,
-//       method: 'POST',
-//       contentType: 'application/json',
-//       data: {
-//         fields: {
-//           project: {
-//             key: 'YL2',
-//           },
-//           summary: 'debug',
-//           description: {
-//             content: [
-//               {
-//                 content: [
-//                   {
-//                     text: 'debug',
-//                     type: 'text',
-//                   },
-//                 ],
-//                 type: 'paragraph',
-//               },
-//             ],
-//             type: 'doc',
-//             version: 1,
-//           },
-//           issuetype: {
-//             id: 10005,
-//           },
-//           reporter: reporterValue.value
-//             ? {
-//                 id: reporterValue.value,
-//               }
-//             : null,
-//           customfield_10037: '666666s',
-//           customfield_10041: { value: -1 },
-//           customfield_10038: 911111.8,
-//         },
-//         // update: {
-//         //   customfield_10041: [{ set: { id: 10030 } }],
-//         // },
-//       },
-//     })
-//     console.log('POST DATA', data)
-//     if (data.errors) {
-//       alert(JSON.stringify(data.errors))
-//       return
-//     }
-//     alert('Задача создана успешно!')
-//     clearInput()
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+const debugCreateTask = async () => {
+  try {
+    alert('DEBUG')
+    const { data } = await HDE.request({
+      auth: 'JiraAuth',
+      url: createIssueUrl,
+      method: 'POST',
+      contentType: 'application/json',
+      data: {
+        fields: {
+          project: {
+            key: 'YL2',
+          },
+          summary: 'debug',
+          description: {
+            content: [
+              {
+                content: [
+                  {
+                    text: 'debug',
+                    type: 'text',
+                  },
+                ],
+                type: 'paragraph',
+              },
+            ],
+            type: 'doc',
+            version: 1,
+          },
+          issuetype: {
+            id: 10005,
+          },
+          reporter: reporterValue.value
+            ? {
+                id: reporterValue.value,
+              }
+            : null,
+          customfield_10037: '666666s',
+          customfield_10041: {
+            value: -1,
+          },
+          customfield_10038: 0.5,
+        },
+        // update: {
+        //   customfield_10041: [{ set: { value: -1 } }],
+        // },
+      },
+    })
+    console.log('POST DATA', data)
+    if (data.errors) {
+      alert(JSON.stringify(data.errors))
+      return
+    }
+    alert('Задача создана успешно!')
+    clearInput()
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 getQuery()
 

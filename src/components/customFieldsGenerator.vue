@@ -34,6 +34,7 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
       <input
         :id="field.key"
         type="number"
+        min="1"
         step="0.001"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
