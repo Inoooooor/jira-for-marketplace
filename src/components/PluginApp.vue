@@ -360,6 +360,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 >Тема</label
               >
               <input
+                maxlength="50"
                 name=""
                 id="subject"
                 class="wide-form-field border-gray-500 border"
