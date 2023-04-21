@@ -126,6 +126,9 @@ const createIssueDataMaker = (hdeIdList) => {
     } else if (field.schema.custom === TYPE_BASE + 'url') {
       basicFieldsObj[field.key] = customFieldsValues.value[index]
       return
+    } else if (field.schema.custom === TYPE_BASE + 'datepicker') {
+      basicFieldsObj[field.key] = customFieldsValues.value[index]
+      return
     }
     basicFieldsObj[field.key] = customFieldsValues.value[index]
     return
