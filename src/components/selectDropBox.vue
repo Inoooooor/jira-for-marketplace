@@ -13,19 +13,33 @@ const dropDownToggle = () => {
 }
 </script>
 <template>
-  <div id="list1" class="inline-block" tabindex="100">
+  <div id="list1" class="dropdown-check-list" tabindex="100">
     <span class="anchor" @click="dropDownToggle()">Select Fruits</span>
     <ul class="items">
+      <li><input type="checkbox" />Apple</li>
+      <li><input type="checkbox" />Apple</li>
+      <li><input type="checkbox" />Apple</li>
+      <li><input type="checkbox" />Apple</li>
+      <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
     </ul>
   </div>
 </template>
-<style scope>
+<style>
+.dropdown-check-list {
+  display: inline-block;
+  grid-column-start: 4;
+  grid-column-end: 9;
+  position: relative;
+}
+
 .dropdown-check-list .anchor {
   position: relative;
   cursor: pointer;
   display: inline-block;
-  padding: 5px 50px 5px 10px;
+  /* padding: 5px 50px 5px 10px; */
+  width: 100%;
+  height: 80%;
   border: 1px solid #ccc;
 }
 
@@ -51,6 +65,7 @@ const dropDownToggle = () => {
 
 .dropdown-check-list ul.items {
   padding: 2px;
+  width: 100%;
   display: none;
   margin: 0;
   border: 1px solid #ccc;
@@ -60,6 +75,7 @@ const dropDownToggle = () => {
 
 .dropdown-check-list ul.items li {
   list-style: none;
+  width: 100%;
 }
 
 .dropdown-check-list.visible .anchor {
