@@ -5,8 +5,17 @@
 //     checkList.classList.remove('visible')
 //   else checkList.classList.add('visible')
 // }
+import { ref } from 'vue'
 
 defineProps(['checkBoxFields'])
+
+const emit = defineEmits(['checkBoxChange'])
+
+const checkBoxChangeEmit = () => emit('checkBoxChange', checkBoxValues.value)
+
+const checkBoxValues = ref([])
+
+// const testCheckValues = (arr) => console.log(arr)
 
 const dropDownToggle = () => {
   const checkList = document.getElementById('list1')
@@ -20,7 +29,13 @@ const dropDownToggle = () => {
     <span class="anchor" @click="dropDownToggle()">Select Fruits</span>
     <ul class="items">
       <li v-for="(option, index) in checkBoxFields" :key="index">
-        <input type="checkbox" name="" id="" />
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          v-model="checkBoxValues[index]"
+          @input="checkBoxChangeEmit()"
+        />
         {{ option.value }}
         {{ option.id }}
       </li>

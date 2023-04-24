@@ -11,6 +11,8 @@ const inputChange = () => emit('inputChange', FieldsValues.value)
 
 const FieldsValues = ref([])
 
+const testCheckValues = (arr) => console.log('С компонента чекбоксов', arr)
+
 // const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 // const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
 </script>
@@ -82,7 +84,10 @@ const FieldsValues = ref([])
       </select>
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
-      <selectDropBox :checkBoxFields="field.allowedValues" />
+      <selectDropBox
+        :checkBoxFields="field.allowedValues"
+        @checkBoxChange="testCheckValues($event)"
+      />
     </template>
   </div>
 </template>
