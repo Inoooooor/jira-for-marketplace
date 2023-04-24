@@ -50,7 +50,7 @@ const checkBoxChange = (checkBoxArray, index) => {
       <input
         :id="field.key"
         type="url"
-        pattern="https://.*"
+        pattern="https?://.*"
         placeholder="https://example.com"
         required
         maxlength="80"
@@ -73,7 +73,10 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
       <input
         :id="field.key"
+        required
         type="date"
+        min="1943-01-01"
+        max="2039-12-31"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
         v-model="FieldsValues[index]"
