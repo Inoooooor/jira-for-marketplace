@@ -7,11 +7,23 @@ import selectDropBox from './selectDropBox.vue'
 defineProps(['fieldsList'])
 
 const emit = defineEmits(['inputChange'])
+
 const inputChange = () => emit('inputChange', FieldsValues.value)
 
 const FieldsValues = ref([])
 
-const testCheckValues = (arr) => console.log('С компонента чекбоксов', arr)
+const checkBoxChange = (checkBoxArray, index) => {
+  // console.log('В ГЕНЕРАТОРЕ в жсоне', checkBoxArray)
+  // console.log('На каком месте индекс', index)
+  FieldsValues.value[index] = checkBoxArray
+  console.log(
+    'ПОсле добавления в массив значений в ГЕНЕРАТОРЕ',
+    FieldsValues.value
+  )
+  inputChange()
+}
+
+// const testCheckValues = (arr) => console.log('С компонента чекбоксов', arr)
 
 // const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 // const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
@@ -86,7 +98,7 @@ const testCheckValues = (arr) => console.log('С компонента чекбо
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
       <selectDropBox
         :checkBoxFields="field.allowedValues"
-        @checkBoxChange="testCheckValues($event)"
+        @checkBoxChange="checkBoxChange($event, index)"
       />
     </template>
   </div>

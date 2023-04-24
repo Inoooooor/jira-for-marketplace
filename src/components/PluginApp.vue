@@ -265,6 +265,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
   // console.log(emittedFieldsArray)
   console.table(customFieldsValues.value)
 }
+
+// const emitTest = (test) => console.log('МЫ в главном компоненте', test)
 </script>
 
 <template>
