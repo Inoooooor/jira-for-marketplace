@@ -6,6 +6,7 @@ import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
 import { TYPE_BASE } from '../config/configs'
+import { makeArrayFromCheckboxes } from '../utils/helpers'
 
 // variables
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
@@ -128,6 +129,20 @@ const createIssueDataMaker = (hdeIdList) => {
       return
     } else if (field.schema.custom === TYPE_BASE + 'datepicker') {
       basicFieldsObj[field.key] = customFieldsValues.value[index]
+      return
+    } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
+      // console.log('ZNACHENIE', customFieldsValues.value[index])
+      // console.log(
+      //   'ZNACHENIE FORMAT\n',
+      //   makeArrayFromCheckboxes(
+      //     JSON.parse(customFieldsValues.value[index]),
+      //     field.allowedValues
+      //   )
+      // )
+      basicFieldsObj[field.key] = makeArrayFromCheckboxes(
+        JSON.parse(customFieldsValues.value[index]),
+        field.allowedValues
+      )
       return
     }
     basicFieldsObj[field.key] = customFieldsValues.value[index]

@@ -88,6 +88,7 @@ const dropDownToggle = () => {
   border: 1px solid #ccc;
   border-top: none;
   position: absolute;
+  background-color: white;
 }
 
 .dropdown-check-list ul.items li {
