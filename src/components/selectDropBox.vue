@@ -65,8 +65,10 @@ const dropDownToggle = () => {
   display: inline-block;
   /* padding: 5px 50px 5px 10px; */
   width: 100%;
-  height: 80%;
+  height: 100%;
   border: 1px solid #ccc;
+  line-height: 2.5rem;
+  padding-left: 0.25rem;
 }
 
 .dropdown-check-list .anchor:after {

@@ -77,7 +77,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         type="date"
         min="1943-01-01"
         max="2039-12-31"
-        class="wide-form-field border border-gray-300 rounded"
+        class="wide-form-field border border-gray-300 rounded h-full"
         @input="inputChange()"
         v-model="FieldsValues[index]"
       />
@@ -85,7 +85,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
         :id="field.key"
-        class="wide-form-field border border-gray-300 rounded"
+        class="wide-form-field border border-gray-300 rounded h-full"
         @change="inputChange()"
         v-model="FieldsValues[index]"
       >
