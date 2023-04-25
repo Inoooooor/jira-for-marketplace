@@ -307,7 +307,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             action=""
             class="grid grid-rows-10 gap-2 h-full"
           >
-            <div class="grid grid-cols-12">
+            <div class="grid grid-cols-12 h-10">
               <label for="jiraProject" class="form-labels-pos required-field"
                 >Проект
               </label>
@@ -327,7 +327,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 </option>
               </select>
             </div>
-            <div class="grid grid-cols-12">
+            <div class="grid grid-cols-12 h-10">
               <label for="issueType" class="form-labels-pos required-field"
                 >Тип проблемы</label
               >
@@ -349,7 +349,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             </div>
 
             <template v-if="reportersList">
-              <div class="grid grid-cols-12">
+              <div class="grid grid-cols-12 h-10">
                 <label for="author" class="form-labels-pos">Автор</label>
                 <select
                   v-model="reporterValue"
@@ -379,7 +379,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 id="addSpectator"
               />
             </div>
-            <div class="grid grid-cols-12">
+            <div class="grid grid-cols-12 h-10">
               <label for="subject" class="form-labels-pos required-field"
                 >Тема</label
               >
@@ -400,7 +400,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               <textarea
                 name="executor"
                 id="executor"
-                class="wide-form-field max-h-[200px] auto-rows-max"
+                class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
                 placeholder="Опишите здесь проблему"
                 v-model="descriptionValue"
                 @input="valueCheck(descriptionValue)"

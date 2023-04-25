@@ -30,7 +30,7 @@ const checkBoxChange = (checkBoxArray, index) => {
 </script>
 <template>
   <div
-    class="grid grid-cols-12"
+    class="grid grid-cols-12 h-10"
     v-for="(field, index) in fieldsList"
     :key="index"
   >
