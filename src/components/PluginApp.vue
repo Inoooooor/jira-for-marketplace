@@ -1,6 +1,6 @@
 <script setup>
 import HDE from '../plugin'
-import { ref, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
 import bindIssuesTab from './bindIssueTab.vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
@@ -24,6 +24,9 @@ let reportersList = ref('')
 let reporterValue = ref('')
 const customFieldsValues = ref([])
 const chosenIssueTypeIndex = ref(0)
+const listenerForMultiCheckboxErase = ref(0)
+
+provide('buttonClickListener', listenerForMultiCheckboxErase)
 
 const fieldsList = computed(() =>
   Object.values(
@@ -185,6 +188,7 @@ const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
   customFieldsValues.value.length = 0
+  listenerForMultiCheckboxErase.value++
 }
 
 // const debugCreateTask = async () => {

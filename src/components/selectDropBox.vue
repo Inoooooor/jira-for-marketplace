@@ -5,7 +5,11 @@
 //     checkList.classList.remove('visible')
 //   else checkList.classList.add('visible')
 // }
-import { ref, onUpdated } from 'vue'
+import { ref, onUpdated, inject, watch } from 'vue'
+
+const isFormBtnClicked = inject('buttonClickListener')
+
+// console.log('фром парентс парент', test)
 
 defineProps(['checkBoxFields'])
 
@@ -14,6 +18,11 @@ const emit = defineEmits(['checkBoxChange'])
 const checkBoxValues = ref([])
 
 onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
+
+watch(isFormBtnClicked, () => {
+  // console.log('changed in parent', isFormBtnClicked.value)
+  checkBoxValues.value.length = 0
+})
 
 // const testCheckValues = (arr) => console.log(arr)
 
