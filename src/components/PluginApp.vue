@@ -277,6 +277,7 @@ const valueCheck = (value) => {
         field.key !== 'project'
     )
   )
+  clearInput()
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
