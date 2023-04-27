@@ -23,6 +23,8 @@ const checkBoxChange = (checkBoxArray, index) => {
   inputChange()
 }
 
+// {{ field.schema.type }}
+
 // const testCheckValues = (arr) => console.log('С компонента чекбоксов', arr)
 
 // const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
@@ -34,9 +36,9 @@ const checkBoxChange = (checkBoxArray, index) => {
     v-for="(field, index) in fieldsList"
     :key="index"
   >
-    <label :for="field.key" class="form-labels-pos required-field"
-      >{{ field.name }} {{ field.schema.type }}</label
-    >
+    <label :for="field.key" class="form-labels-pos required-field">{{
+      field.name
+    }}</label>
     <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
       <input
         :id="field.key"
