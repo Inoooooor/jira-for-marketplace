@@ -385,6 +385,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               >
               <input
                 maxlength="50"
+                required
                 name=""
                 id="subject"
                 class="wide-form-field border-gray-500 border"
@@ -399,6 +400,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               >
               <textarea
                 name="executor"
+                required
                 id="executor"
                 class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
                 placeholder="Опишите здесь проблему"

@@ -42,6 +42,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
       <input
         :id="field.key"
+        required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
@@ -53,6 +54,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     >
       <input
         :id="field.key"
+        required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
@@ -75,6 +77,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
       <input
         :id="field.key"
+        required
         type="number"
         min="1"
         step="0.001"
@@ -98,6 +101,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
         :id="field.key"
+        required
         class="wide-form-field border border-gray-300 rounded h-full"
         @change="inputChange()"
         v-model="FieldsValues[index]"
