@@ -16,25 +16,25 @@ defineProps(['checkBoxFields'])
 const emit = defineEmits(['checkBoxChange'])
 
 const checkBoxValues = ref([])
+const uniqueChecboxId = `list ${Math.random() * 1e18}`
 
 onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
 
 watch(isFormBtnClicked, () => {
-  // console.log('changed in parent', isFormBtnClicked.value)
   checkBoxValues.value.length = 0
 })
 
 // const testCheckValues = (arr) => console.log(arr)
 
 const dropDownToggle = () => {
-  const checkList = document.getElementById('list1')
+  const checkList = document.getElementById(uniqueChecboxId)
   if (checkList.classList.contains('visible'))
     checkList.classList.remove('visible')
   else checkList.classList.add('visible')
 }
 </script>
 <template>
-  <div id="list1" class="dropdown-check-list" tabindex="100">
+  <div :id="uniqueChecboxId" class="dropdown-check-list" tabindex="100">
     <span class="anchor" @click="dropDownToggle()">Select Fruits</span>
     <ul class="items">
       <li v-for="(option, index) in checkBoxFields" :key="index">
