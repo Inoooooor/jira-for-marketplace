@@ -16,7 +16,7 @@ defineProps(['checkBoxFields'])
 const emit = defineEmits(['checkBoxChange'])
 
 const checkBoxValues = ref([])
-const uniqueChecboxId = `list ${Math.random() * 1e18}`
+const uniqueCheckboxId = `list ${Math.random() * 1e18}`
 
 onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
 
@@ -24,19 +24,30 @@ watch(isFormBtnClicked, () => {
   checkBoxValues.value.length = 0
 })
 
-// const testCheckValues = (arr) => console.log(arr)
+const dropDownHide = () => {
+  const checkList = document.getElementById(uniqueCheckboxId)
+  if (checkList.classList.contains('visible'))
+    checkList.classList.remove('visible')
+}
 
-const dropDownToggle = () => {
-  const checkList = document.getElementById(uniqueChecboxId)
+document.querySelector('.tabs').addEventListener('click', () => dropDownHide())
+
+const dropDownToggle = (e) => {
+  const checkList = document.getElementById(uniqueCheckboxId)
   if (checkList.classList.contains('visible'))
     checkList.classList.remove('visible')
   else checkList.classList.add('visible')
+  e.stopPropagation()
 }
+
+const stopListHideOnclick = (e) => e.stopPropagation()
 </script>
 <template>
-  <div :id="uniqueChecboxId" class="dropdown-check-list" tabindex="100">
-    <span class="anchor" @click="dropDownToggle()">Выберите значения</span>
-    <ul class="items">
+  <div :id="uniqueCheckboxId" class="dropdown-check-list" tabindex="100">
+    <span class="anchor" @click="dropDownToggle($event)"
+      >Выберите значения</span
+    >
+    <ul class="items" @click="stopListHideOnclick">
       <li
         class="hover:bg-gray-200"
         v-for="(option, index) in checkBoxFields"
