@@ -309,8 +309,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
           >
             <div class="grid grid-cols-12 h-10">
               <label for="jiraProject" class="form-labels-pos required-field"
-                >Проект
-              </label>
+                >Проект</label
+              >
               <select
                 name="jiraProject"
                 id="jiraProject"
@@ -395,8 +395,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             </div>
             <div class="grid grid-cols-12">
               <label for="executor" class="form-labels-pos required-field"
-                >Описание
-              </label>
+                >Описание</label
+              >
               <textarea
                 name="executor"
                 id="executor"
