@@ -48,6 +48,17 @@ const checkBoxChange = (checkBoxArray, index) => {
         v-model="FieldsValues[index]"
       />
     </template>
+    <template
+      v-if="field.schema.custom === 'com.pyxis.greenhopper.jira:gh-epic-label'"
+    >
+      <input
+        :id="field.key"
+        type="text"
+        class="wide-form-field border border-gray-300 rounded"
+        @input="inputChange()"
+        v-model="FieldsValues[index]"
+      />
+    </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
       <input
         :id="field.key"

@@ -277,7 +277,6 @@ const valueCheck = (value) => {
         field.key !== 'project'
     )
   )
-  clearInput()
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
@@ -337,7 +336,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 id="issueType"
                 class="centered-form-field"
                 v-model="chosenIssueTypeIndex"
-                @change="valueCheck(chosenIssueTypeIndex)"
+                @change="clearInput()"
               >
                 <option
                   v-for="(issue, index) in response[chosenProject].issuetypes"
