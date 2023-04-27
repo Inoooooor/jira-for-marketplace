@@ -35,12 +35,19 @@ const dropDownToggle = () => {
 </script>
 <template>
   <div :id="uniqueChecboxId" class="dropdown-check-list" tabindex="100">
-    <span class="anchor" @click="dropDownToggle()">Select Fruits</span>
+    <span class="anchor" @click="dropDownToggle()">Выберите значения</span>
     <ul class="items">
-      <li v-for="(option, index) in checkBoxFields" :key="index">
-        <input type="checkbox" v-model="checkBoxValues[index]" />
+      <li
+        class="hover:bg-gray-200"
+        v-for="(option, index) in checkBoxFields"
+        :key="index"
+      >
+        <input
+          class="align-middle"
+          type="checkbox"
+          v-model="checkBoxValues[index]"
+        />
         {{ option.value }}
-        {{ option.id }}
       </li>
       <!-- <li><input type="checkbox" />Apple</li>
       <li><input type="checkbox" />Apple</li>
@@ -69,6 +76,7 @@ const dropDownToggle = () => {
   border: 1px solid #ccc;
   line-height: 2.5rem;
   padding-left: 0.25rem;
+  border-radius: 0.25rem;
 }
 
 .dropdown-check-list .anchor:after {
@@ -78,7 +86,7 @@ const dropDownToggle = () => {
   border-top: 2px solid black;
   padding: 5px;
   right: 10px;
-  top: 20%;
+  top: 30%;
   -moz-transform: rotate(-135deg);
   -ms-transform: rotate(-135deg);
   -o-transform: rotate(-135deg);
@@ -87,8 +95,8 @@ const dropDownToggle = () => {
 }
 
 .dropdown-check-list .anchor:active:after {
-  right: 8px;
-  top: 21%;
+  right: 10px;
+  top: 30%;
 }
 
 .dropdown-check-list ul.items {
@@ -97,6 +105,7 @@ const dropDownToggle = () => {
   display: none;
   margin: 0;
   border: 1px solid #ccc;
+  border-radius: 0.25rem;
   border-top: none;
   position: absolute;
   background-color: white;
@@ -109,6 +118,7 @@ const dropDownToggle = () => {
 
 .dropdown-check-list.visible .anchor {
   color: #0094ff;
+  border: black solid 3px;
 }
 
 .dropdown-check-list.visible .items {
