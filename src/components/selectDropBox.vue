@@ -1,15 +1,7 @@
 <script setup>
-// const checkList = document.getElementById('list1')
-// checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
-//   if (checkList.classList.contains('visible'))
-//     checkList.classList.remove('visible')
-//   else checkList.classList.add('visible')
-// }
 import { ref, onUpdated, inject, watch } from 'vue'
 
 const isFormBtnClicked = inject('buttonClickListener')
-
-// console.log('фром парентс парент', test)
 
 defineProps(['checkBoxFields'])
 
@@ -134,5 +126,6 @@ const stopListHideOnclick = (e) => e.stopPropagation()
 
 .dropdown-check-list.visible .items {
   display: block;
+  z-index: 10;
 }
 </style>
