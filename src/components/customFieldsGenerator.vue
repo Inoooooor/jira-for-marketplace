@@ -1,5 +1,4 @@
 <script setup>
-// const childDebugger = () => console.log('child')
 import { ref } from 'vue'
 import { TYPE_BASE } from '../config/configs'
 import selectDropBox from './selectDropBox.vue'
@@ -25,7 +24,6 @@ const getParentIssues = async () => {
       contentType: 'application/json',
     })
     parentIssuesArr.value = data.issues
-    console.log('PARENTS', parentIssuesArr.value)
   } catch (error) {
     console.log(error)
   }
@@ -34,13 +32,7 @@ const getParentIssues = async () => {
 getParentIssues()
 
 const checkBoxChange = (checkBoxArray, index) => {
-  // console.log('В ГЕНЕРАТОРЕ в жсоне', checkBoxArray)
-  // console.log('На каком месте индекс', index)
   FieldsValues.value[index] = checkBoxArray
-  console.log(
-    'ПОсле добавления в массив значений в ГЕНЕРАТОРЕ',
-    FieldsValues.value
-  )
   inputChange()
 }
 </script>

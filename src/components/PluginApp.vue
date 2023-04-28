@@ -52,7 +52,6 @@ const getQuery = async () => {
       contentType: 'application/json',
     })
     response.value = data.projects
-    console.log('проекты', response.value)
   } catch (error) {
     console.log(error)
   }
@@ -69,7 +68,6 @@ const getReportersList = async () => {
     reportersList.value = data.filter(
       (user) => user.accountType === 'atlassian'
     )
-    console.log('АВТОРЫ', reportersList.value)
   } catch (error) {
     console.log(error)
   }
@@ -79,7 +77,6 @@ getReportersList()
 
 const createIssueDataMaker = (hdeIdList) => {
   const customFieldsArr = fieldsList.value
-  console.log('in func', customFieldsArr)
   const basicFieldsObj = {
     project: {
       key: response.value[chosenProject.value].key,
@@ -111,7 +108,6 @@ const createIssueDataMaker = (hdeIdList) => {
         }
       : null,
   }
-  console.log('before', basicFieldsObj)
   customFieldsArr.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicFieldsObj[field.key] = {
@@ -146,13 +142,11 @@ const createIssueDataMaker = (hdeIdList) => {
     basicFieldsObj[field.key] = customFieldsValues.value[index]
     return
   })
-  console.log('after', basicFieldsObj)
   return basicFieldsObj
 }
 
 const createIssue = async () => {
   try {
-    // debugCreateTask()
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
       return
@@ -167,7 +161,6 @@ const createIssue = async () => {
         fields: createIssueDataMaker(hdeIdList),
       },
     })
-    console.log('POST DATA', data)
     if (data.errors) {
       alert(JSON.stringify(data.errors))
       return
@@ -186,101 +179,17 @@ const clearInput = () => {
   listenerForMultiCheckboxErase.value++
 }
 
-// const debugCreateTask = async () => {
-//   try {
-//     alert('DEBUG')
-//     const { data } = await HDE.request({
-//       auth: 'JiraAuth',
-//       url: createIssueUrl,
-//       method: 'POST',
-//       contentType: 'application/json',
-//       data: {
-//         fields: {
-//           project: {
-//             key: 'YL2',
-//           },
-//           summary: 'debug',
-//           description: {
-//             content: [
-//               {
-//                 content: [
-//                   {
-//                     text: 'debug',
-//                     type: 'text',
-//                   },
-//                 ],
-//                 type: 'paragraph',
-//               },
-//             ],
-//             type: 'doc',
-//             version: 1,
-//           },
-//           issuetype: {
-//             id: 10005,
-//           },
-//           reporter: reporterValue.value
-//             ? {
-//                 id: reporterValue.value,
-//               }
-//             : null,
-//           customfield_10037: '666666s',
-//           customfield_10041: {
-//             value: -1,
-//           },
-//           customfield_10038: 1.5,
-//         },
-//         // update: {
-//         //   customfield_10041: [{ set: { value: -1 } }],
-//         // },
-//       },
-//     })
-//     console.log('POST DATA', data)
-//     if (data.errors) {
-//       alert(JSON.stringify(data.errors))
-//       return
-//     }
-//     alert('Задача создана успешно!')
-//     clearInput()
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
 getQuery()
 
 // Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
   chosenIssueTypeIndex.value = 0
   customFieldsValues.value.length = 0
-  // console.log('task index', chosenIssueTypeIndex.value)
-  // console.log('proj index', chosenProject.value)
-  console.log(fieldsList.value)
-}
-
-const valueCheck = (value) => {
-  console.table(value)
-  console.log(
-    Object.values(
-      response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
-        .fields
-    ).filter(
-      (field) =>
-        field.required === true &&
-        field.key !== 'summary' &&
-        field.key !== 'description' &&
-        field.key !== 'issuetype' &&
-        field.key !== 'project'
-    )
-  )
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
   customFieldsValues.value = emittedFieldsArray
-  // console.log(emittedFieldsArray)
-  console.table(customFieldsValues.value)
 }
-
-// const emitTest = (test) => console.log('МЫ в главном компоненте', test)
 </script>
 
 <template>
@@ -351,7 +260,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                   name=""
                   id="author"
                   class="centered-form-field"
-                  @change="valueCheck(reporterValue)"
                 >
                   <option value="">Не определен</option>
                   <option
@@ -386,7 +294,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 class="wide-form-field border-gray-500 border"
                 placeholder="Дайте здесь сводку проблемы"
                 v-model="summaryValue"
-                @input="valueCheck(summaryValue)"
               />
             </div>
             <div class="grid grid-cols-12">
@@ -400,7 +307,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
                 placeholder="Опишите здесь проблему"
                 v-model="descriptionValue"
-                @input="valueCheck(descriptionValue)"
               ></textarea>
             </div>
             <customFieldsGenerator

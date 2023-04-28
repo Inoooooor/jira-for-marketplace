@@ -9,8 +9,6 @@ const addIdToDescription = async () => {
       responseType: 'json',
       method: 'GET',
     })
-    console.log('Подзаявки')
-    console.log(data)
     if (data) {
       const childTicketStr = data.reduce(
         (acc, ticket) =>
@@ -21,13 +19,12 @@ const addIdToDescription = async () => {
         Заявки в HelpDeskEddy:
         `
       )
-      console.log(childTicketStr)
       return childTicketStr
     } else {
       return ''
     }
   } catch (error) {
-    console.log()
+    console.log(error)
   }
 }
 addIdToDescription()
