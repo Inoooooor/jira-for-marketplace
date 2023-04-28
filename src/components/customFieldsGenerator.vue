@@ -3,6 +3,7 @@
 import { ref } from 'vue'
 import { TYPE_BASE } from '../config/configs'
 import selectDropBox from './selectDropBox.vue'
+import HDE from '../plugin'
 
 defineProps(['fieldsList'])
 
@@ -11,6 +12,26 @@ const emit = defineEmits(['inputChange'])
 const inputChange = () => emit('inputChange', FieldsValues.value)
 
 const FieldsValues = ref([])
+const parentIssuesArr = ref([])
+const { systemDomain } = HDE.vars
+const parentIssuesUrl = `https://${systemDomain}/rest/api/3/search?maxResults=10000&fields=id`
+
+const getParentIssues = async () => {
+  try {
+    const { data } = await HDE.request({
+      auth: 'JiraAuth',
+      url: parentIssuesUrl,
+      method: 'GET',
+      contentType: 'application/json',
+    })
+    parentIssuesArr.value = data.issues
+    console.log('PARENTS', parentIssuesArr.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+getParentIssues()
 
 const checkBoxChange = (checkBoxArray, index) => {
   // console.log('В ГЕНЕРАТОРЕ в жсоне', checkBoxArray)
@@ -22,13 +43,6 @@ const checkBoxChange = (checkBoxArray, index) => {
   )
   inputChange()
 }
-
-// {{ field.schema.type }}
-
-// const testCheckValues = (arr) => console.log('С компонента чекбоксов', arr)
-
-// const baseType = 'com.atlassian.jira.plugin.system.customfieldtypes:'
-// const stringifyFieldValue = (index) => FieldsValues[index] = FieldsValues[index].toString()
 </script>
 <template>
   <div
@@ -112,6 +126,25 @@ const checkBoxChange = (checkBoxArray, index) => {
           :value="option.value"
         >
           {{ option.value }}
+        </option>
+      </select>
+    </template>
+    <template
+      v-else-if="field.schema.type === 'issuelink' && parentIssuesArr.length"
+    >
+      <select
+        :id="field.key"
+        required
+        class="wide-form-field border border-gray-300 rounded h-full"
+        @change="inputChange()"
+        v-model="FieldsValues[index]"
+      >
+        <option
+          v-for="(option, index) in parentIssuesArr"
+          :key="index"
+          :value="option.key"
+        >
+          {{ option.key }}
         </option>
       </select>
     </template>

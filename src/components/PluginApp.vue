@@ -134,18 +134,13 @@ const createIssueDataMaker = (hdeIdList) => {
       basicFieldsObj[field.key] = customFieldsValues.value[index]
       return
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
-      // console.log('ZNACHENIE', customFieldsValues.value[index])
-      // console.log(
-      //   'ZNACHENIE FORMAT\n',
-      //   makeArrayFromCheckboxes(
-      //     JSON.parse(customFieldsValues.value[index]),
-      //     field.allowedValues
-      //   )
-      // )
       basicFieldsObj[field.key] = makeArrayFromCheckboxes(
         JSON.parse(customFieldsValues.value[index]),
         field.allowedValues
       )
+      return
+    } else if (field.schema.type === 'issuelink') {
+      basicFieldsObj[field.key] = { key: customFieldsValues.value[index] }
       return
     }
     basicFieldsObj[field.key] = customFieldsValues.value[index]
