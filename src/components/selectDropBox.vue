@@ -18,7 +18,7 @@ watch(isFormBtnClicked, () => {
 
 const dropDownHide = () => {
   const checkList = document.getElementById(uniqueCheckboxId)
-  if (checkList.classList.contains('visible'))
+  if (checkList?.classList.contains('visible'))
     checkList.classList.remove('visible')
 }
 
