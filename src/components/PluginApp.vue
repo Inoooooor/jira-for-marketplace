@@ -1,7 +1,6 @@
 <script setup>
 import HDE from '../plugin'
 import { ref, computed, provide } from 'vue'
-import bindIssuesTab from './bindIssueTab.vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
@@ -326,13 +325,14 @@ const fillValuesFromFields = (emittedFieldsArray) => {
           </template>
         </div>
       </div>
-      <div class="tab">
+      <!-- Связка задач в джире в разработке, не удалять -->
+      <!-- <div class="tab">
         <input type="radio" name="css-tabs" id="tab-2" class="tab-switch" />
         <label for="tab-2" class="tab-label">Связать задачи</label>
         <div class="tab-content w-full grid grid-rows-[1fr_minmax(100px,_7fr)]">
           <bindIssuesTab />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
