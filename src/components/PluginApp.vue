@@ -313,50 +313,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               :fieldsList="fieldsList"
               @input-change="fillValuesFromFields($event)"
             />
-            <!--
-            <template v-if="JiraComponentsResponse">
-              <div class="grid grid-cols-12">
-                <label for="components" class="form-labels-pos required-field"
-                  >Components</label
-                >
-                <select
-                  name=""
-                  id="components"
-                  class="wide-form-field border"
-                  v-model="componentValue"
-                >
-                  <option
-                    v-for="(component, index) in JiraComponentsResponse"
-                    :key="index"
-                    :value="component.name"
-                  >
-                    {{ component.name }}
-                  </option>
-                </select>
-              </div>
-            </template>
-            <template v-if="environmentOptions">
-              <div class="grid grid-cols-12">
-                <label for="environment" class="form-labels-pos required-field"
-                  >Environment</label
-                >
-                <select
-                  name=""
-                  id="environment"
-                  class="wide-form-field border"
-                  v-model="environmentValue"
-                >
-                  <option
-                    v-for="(environment, index) in environmentOptions"
-                    :key="index"
-                    :value="environment.value"
-                  >
-                    {{ environment.value }}
-                  </option>
-                </select>
-              </div>
-            </template>
-            -->
             <div class="grid grid-cols-12">
               <button
                 class="col-span-2 border border-blue-500 place-self-end self-center rounded hover:bg-blue-500 hover:text-white col-start-7 p-1"
