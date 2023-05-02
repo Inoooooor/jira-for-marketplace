@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  /* *::placeholder {
-    @apply pl-0;
-  } */
   html {
     @apply bg-white font-sans;
   }
@@ -56,10 +53,6 @@
     @apply col-span-3 self-center place-self-end pr-4;
   }
 
-  /* .placeholder-style {
-    @apply placeholder:pl-1;
-  } */
-
   .checkbox-label {
     @apply after:content-['Добавить_автора_отчёта_как_наблюдателя'] after:absolute after:w-[300px] after:left-full after:pl-1;
   }
@@ -68,8 +61,6 @@
     @apply w-2 h-2;
   }
   ::-webkit-scrollbar-thumb {
-    /* background-color: rgba(170, 170, 170, 0.5); */
-    /* border-radius: 6px; */
     @apply bg-[rgba(170,_170,_170,_0.5)] rounded-md;
   }
 }

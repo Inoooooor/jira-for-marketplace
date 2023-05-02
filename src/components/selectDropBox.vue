@@ -52,12 +52,6 @@ const stopListHideOnclick = (e) => e.stopPropagation()
         />
         {{ option.value }}
       </li>
-      <!-- <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li>
-      <li><input type="checkbox" />Apple</li> -->
     </ul>
   </div>
 </template>
@@ -73,7 +67,6 @@ const stopListHideOnclick = (e) => e.stopPropagation()
   position: relative;
   cursor: pointer;
   display: inline-block;
-  /* padding: 5px 50px 5px 10px; */
   width: 100%;
   height: 100%;
   border: 1px solid #ccc;
