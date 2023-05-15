@@ -11,9 +11,9 @@ import { makeArrayFromCheckboxes } from '../utils/helpers'
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
-const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
-const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
-const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
+const reportersUrl = `https://${systemDomain}/rest/api/2/user/search?query=&username=%22%22&maxResults=1000`
+const getUrl = `https://${systemDomain}/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields`
+const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
 
 const response = ref(null)
 let chosenProject = ref(0)
@@ -25,20 +25,15 @@ const customFieldsValues = ref([])
 const chosenIssueTypeIndex = ref(0)
 const listenerForMultiCheckboxErase = ref(0)
 
+const fieldsFilters = ['summary', 'description', 'issuetype', 'project']
+
 provide('buttonClickListener', listenerForMultiCheckboxErase)
 
 const fieldsList = computed(() =>
   Object.values(
     response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
       .fields
-  ).filter(
-    (field) =>
-      field.required === true &&
-      field.key !== 'summary' &&
-      field.key !== 'description' &&
-      field.key !== 'issuetype' &&
-      field.key !== 'project'
-  )
+  ).filter((field) => field.required && !fieldsFilters.includes(field.fieldId))
 )
 
 //functions
@@ -51,6 +46,7 @@ const getQuery = async () => {
       contentType: 'application/json',
     })
     response.value = data.projects
+    console.log(data.projects)
   } catch (error) {
     console.log(error)
   }
@@ -64,9 +60,8 @@ const getReportersList = async () => {
       method: 'GET',
       contentType: 'application/json',
     })
-    reportersList.value = data.filter(
-      (user) => user.accountType === 'atlassian'
-    )
+    reportersList.value = data.filter((user) => user.active === true)
+    // console.log(data)
   } catch (error) {
     console.log(error)
   }
@@ -81,21 +76,7 @@ const createIssueDataMaker = (hdeIdList) => {
       key: response.value[chosenProject.value].key,
     },
     summary: `${summaryValue.value} ${uniqueId}`,
-    description: {
-      content: [
-        {
-          content: [
-            {
-              text: `${descriptionValue.value}${hdeIdList}`,
-              type: 'text',
-            },
-          ],
-          type: 'paragraph',
-        },
-      ],
-      type: 'doc',
-      version: 1,
-    },
+    description: `${descriptionValue.value}${hdeIdList}`,
     issuetype: {
       id: response.value[chosenProject.value].issuetypes[
         chosenIssueTypeIndex.value
@@ -151,6 +132,7 @@ const createIssue = async () => {
       return
     }
     const hdeIdList = await addIdToDescription()
+    console.log('обьект создания', createIssueDataMaker(hdeIdList))
     const { data } = await HDE.request({
       auth: 'JiraAuth',
       url: createIssueUrl,
