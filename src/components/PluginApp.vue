@@ -61,7 +61,7 @@ const getReportersList = async () => {
       contentType: 'application/json',
     })
     reportersList.value = data.filter((user) => user.active === true)
-    // console.log(data)
+    console.log(reportersList.value)
   } catch (error) {
     console.log(error)
   }
@@ -84,7 +84,7 @@ const createIssueDataMaker = (hdeIdList) => {
     },
     reporter: reporterValue.value
       ? {
-          id: reporterValue.value,
+          name: reporterValue.value,
         }
       : null,
   }
@@ -142,6 +142,7 @@ const createIssue = async () => {
         fields: createIssueDataMaker(hdeIdList),
       },
     })
+    console.log('ошибка', data)
     if (data.errors) {
       alert(JSON.stringify(data.errors))
       return
@@ -171,6 +172,8 @@ const zerofier = () => {
 const fillValuesFromFields = (emittedFieldsArray) => {
   customFieldsValues.value = emittedFieldsArray
 }
+
+const logTest = (variable) => console.log(variable)
 </script>
 
 <template>
@@ -241,11 +244,12 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                   name=""
                   id="author"
                   class="centered-form-field"
+                  @change="logTest(reporterValue)"
                 >
                   <option value="">Не определен</option>
                   <option
                     v-for="(reporter, index) in reportersList"
-                    :value="reporter.accountId"
+                    :value="reporter.name"
                     :key="index"
                   >
                     {{ reporter.displayName }}
