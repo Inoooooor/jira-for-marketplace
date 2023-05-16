@@ -25,15 +25,32 @@ const customFieldsValues = ref([])
 const chosenIssueTypeIndex = ref(0)
 const listenerForMultiCheckboxErase = ref(0)
 
-const fieldsFilters = ['summary', 'description', 'issuetype', 'project']
+const fieldsFilters = [
+  'summary',
+  'description',
+  'issuetype',
+  'project',
+  'reporter',
+]
+const fieldsToRender = ['Environment', 'Component/s']
 
 provide('buttonClickListener', listenerForMultiCheckboxErase)
+
+const isFieldRendered = (customfield) => {
+  if (
+    (customfield.required && !fieldsFilters.includes(customfield.fieldId)) ||
+    fieldsToRender.includes(customfield.name)
+  ) {
+    return true
+  }
+  return false
+}
 
 const fieldsList = computed(() =>
   Object.values(
     response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
       .fields
-  ).filter((field) => field.required && !fieldsFilters.includes(field.fieldId))
+  ).filter((field) => isFieldRendered(field))
 )
 
 //functions
