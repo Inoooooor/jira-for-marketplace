@@ -35,6 +35,12 @@ const checkBoxChange = (checkBoxArray, index) => {
   FieldsValues.value[index] = checkBoxArray
   inputChange()
 }
+
+const isSelectType = (fieldConfigs) => {
+  const filterTypes = [TYPE_BASE + 'select', TYPE_BASE + 'multiselect']
+  if (filterTypes.includes(fieldConfigs.schema.custom)) return true
+  return false
+}
 </script>
 <template>
   <div
@@ -105,6 +111,40 @@ const checkBoxChange = (checkBoxArray, index) => {
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
+      <select
+        :id="field.key"
+        required
+        class="wide-form-field border border-gray-300 rounded h-full"
+        @change="inputChange()"
+        v-model="FieldsValues[index]"
+      >
+        <option
+          v-for="(option, index) in field.allowedValues"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.value }}
+        </option>
+      </select>
+    </template>
+    <template v-else-if="field.schema.system === 'components'">
+      <select
+        :id="field.key"
+        required
+        class="wide-form-field border border-gray-300 rounded h-full"
+        @change="inputChange()"
+        v-model="FieldsValues[index]"
+      >
+        <option
+          v-for="(option, index) in field.allowedValues"
+          :key="index"
+          :value="option.name"
+        >
+          {{ option.name }}
+        </option>
+      </select>
+    </template>
+    <template v-else-if="isSelectType(field)">
       <select
         :id="field.key"
         required

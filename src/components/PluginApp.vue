@@ -126,6 +126,16 @@ const createIssueDataMaker = (hdeIdList) => {
     } else if (field.schema.custom === TYPE_BASE + 'datepicker') {
       basicFieldsObj[field.key] = customFieldsValues.value[index]
       return
+    } else if (field.name === 'Environment') {
+      basicFieldsObj[field.fieldId] = [
+        { value: customFieldsValues.value[index] },
+      ]
+      return
+    } else if (field.schema.system === 'components') {
+      basicFieldsObj[field.fieldId] = [
+        { name: customFieldsValues.value[index] },
+      ]
+      return
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicFieldsObj[field.key] = makeArrayFromCheckboxes(
         JSON.parse(customFieldsValues.value[index]),
