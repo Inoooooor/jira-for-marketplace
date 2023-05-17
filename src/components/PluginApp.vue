@@ -4,10 +4,12 @@ import { ref, computed, provide } from 'vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
+import bindIssuesTab from './bindIssueTab.vue'
 import { TYPE_BASE } from '../config/configs'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
 
-// variables
+const DEV = import.meta.env.DEV
+
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
@@ -16,7 +18,7 @@ const getUrl = `https://${systemDomain}/rest/api/2/issue/createmeta?expand=proje
 const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
 
 const response = ref(null)
-let chosenProject = ref(0)
+let chosenProject = ref(16)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
@@ -63,7 +65,7 @@ const getQuery = async () => {
       contentType: 'application/json',
     })
     response.value = data.projects
-    console.log(data.projects)
+    if (DEV) console.log(data.projects)
   } catch (error) {
     console.log(error)
   }
@@ -78,7 +80,7 @@ const getReportersList = async () => {
       contentType: 'application/json',
     })
     reportersList.value = data.filter((user) => user.active === true)
-    console.log(reportersList.value)
+    if (DEV) console.log(reportersList.value)
   } catch (error) {
     console.log(error)
   }
@@ -159,7 +161,7 @@ const createIssue = async () => {
       return
     }
     const hdeIdList = await addIdToDescription()
-    console.log('обьект создания', createIssueDataMaker(hdeIdList))
+    if (DEV) console.log('обьект создания', createIssueDataMaker(hdeIdList))
     const { data } = await HDE.request({
       auth: 'JiraAuth',
       url: createIssueUrl,
@@ -169,7 +171,7 @@ const createIssue = async () => {
         fields: createIssueDataMaker(hdeIdList),
       },
     })
-    console.log('ошибка', data)
+    if (DEV) console.log('ошибка', data)
     if (data.errors) {
       alert(JSON.stringify(data.errors))
       return
@@ -339,13 +341,13 @@ const logTest = (variable) => console.log(variable)
         </div>
       </div>
       <!-- Связка задач в джире в разработке, не удалять -->
-      <!-- <div class="tab">
+      <div class="tab">
         <input type="radio" name="css-tabs" id="tab-2" class="tab-switch" />
         <label for="tab-2" class="tab-label">Связать задачи</label>
         <div class="tab-content w-full grid grid-rows-[1fr_minmax(100px,_7fr)]">
           <bindIssuesTab />
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
