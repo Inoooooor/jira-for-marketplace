@@ -101,11 +101,9 @@ const createIssueDataMaker = (hdeIdList) => {
         chosenIssueTypeIndex.value
       ].id,
     },
-    reporter: reporterValue.value
-      ? {
-          name: reporterValue.value,
-        }
-      : null,
+    reporter: {
+      name: reporterValue.value ? reporterValue.value : null,
+    },
   }
   customFieldsArr.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
@@ -161,6 +159,7 @@ const createIssue = async () => {
       return
     }
     const hdeIdList = await addIdToDescription()
+    if (DEV) console.log('чайлды задачи', hdeIdList)
     if (DEV) console.log('обьект создания', createIssueDataMaker(hdeIdList))
     const { data } = await HDE.request({
       auth: 'JiraAuth',
