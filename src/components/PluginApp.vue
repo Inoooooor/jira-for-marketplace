@@ -73,8 +73,38 @@ const getReportersList = async () => {
 
 getReportersList()
 
+const addCustomFields = (basicObj) => {
+  let customFieldsFilter = [
+    'textfield',
+    'float',
+    'url',
+    'datepicker',
+    'multicheckboxes',
+  ]
+
+  customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
+
+  fieldsList.value.forEach((field, index) => {
+    if (field.schema.custom === TYPE_BASE + 'select') {
+      basicObj[field.key] = {
+        value: customFieldsValues.value[index],
+      }
+    } else if (customFieldsFilter.includes(field.schema.custom)) {
+      basicObj[field.key] = customFieldsValues.value[index]
+    } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
+      basicObj[field.key] = makeArrayFromCheckboxes(
+        JSON.parse(customFieldsValues.value[index]),
+        field.allowedValues
+      )
+    } else if (field.schema.type === 'issuelink') {
+      basicObj[field.key] = { key: customFieldsValues.value[index] }
+    }
+  })
+  return basicObj
+}
+
 const createIssueDataMaker = (hdeIdList) => {
-  const basicFieldsObj = createBasicFields({
+  let basicFieldsObj = createBasicFields({
     project: response.value[chosenProject.value].key,
     summary: summaryValue.value,
     description: descriptionValue.value,
@@ -85,31 +115,7 @@ const createIssueDataMaker = (hdeIdList) => {
     hdeChildTickets: hdeIdList,
   })
 
-  let customFieldsFilter = [
-    'textfield',
-    'float',
-    'url',
-    'datepicker',
-    'multicheckboxes',
-  ]
-  customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
-
-  fieldsList.value.forEach((field, index) => {
-    if (field.schema.custom === TYPE_BASE + 'select') {
-      basicFieldsObj[field.key] = {
-        value: customFieldsValues.value[index],
-      }
-    } else if (customFieldsFilter.includes(field.schema.custom)) {
-      basicFieldsObj[field.key] = customFieldsValues.value[index]
-    } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
-      basicFieldsObj[field.key] = makeArrayFromCheckboxes(
-        JSON.parse(customFieldsValues.value[index]),
-        field.allowedValues
-      )
-    } else if (field.schema.type === 'issuelink') {
-      basicFieldsObj[field.key] = { key: customFieldsValues.value[index] }
-    }
-  })
+  basicFieldsObj = addCustomFields(basicFieldsObj)
   if (import.meta.env.DEV) console.log(basicFieldsObj)
   return basicFieldsObj
 }
