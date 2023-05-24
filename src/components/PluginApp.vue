@@ -74,7 +74,6 @@ const getReportersList = async () => {
 getReportersList()
 
 const createIssueDataMaker = (hdeIdList) => {
-  const customFieldsArr = fieldsList.value
   const basicFieldsObj = {
     project: {
       key: response.value[chosenProject.value].key,
@@ -106,7 +105,7 @@ const createIssueDataMaker = (hdeIdList) => {
         }
       : null,
   }
-  customFieldsArr.forEach((field, index) => {
+  fieldsList.value.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicFieldsObj[field.key] = {
         value: customFieldsValues.value[index],
@@ -137,8 +136,6 @@ const createIssueDataMaker = (hdeIdList) => {
       basicFieldsObj[field.key] = { key: customFieldsValues.value[index] }
       return
     }
-    basicFieldsObj[field.key] = customFieldsValues.value[index]
-    return
   })
   if (import.meta.env.DEV) console.log(basicFieldsObj)
   return basicFieldsObj
