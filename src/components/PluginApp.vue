@@ -103,7 +103,7 @@ const addCustomFields = (basicObj) => {
   return basicObj
 }
 
-const createIssueDataMaker = (hdeIdList) => {
+const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
     project: response.value[chosenProject.value].key,
     summary: summaryValue.value,
@@ -133,7 +133,7 @@ const createIssue = async () => {
       method: 'POST',
       contentType: 'application/json',
       data: {
-        fields: createIssueDataMaker(hdeIdList),
+        fields: createDataForIssue(hdeIdList),
       },
     })
     if (data.errors) {
