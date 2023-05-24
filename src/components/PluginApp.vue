@@ -116,6 +116,7 @@ const createDataForIssue = (hdeIdList) => {
   })
 
   basicFieldsObj = addCustomFields(basicFieldsObj)
+
   if (import.meta.env.DEV) console.log(basicFieldsObj)
   return basicFieldsObj
 }
@@ -331,14 +332,14 @@ body {
   position: relative;
   background: #2684ff;
   height: 14.75rem;
-}
-.tabs::before,
-.tabs::after {
-  content: '';
-  display: table;
-}
-.tabs::after {
-  clear: both;
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
 }
 .tab {
   float: left;
@@ -358,10 +359,11 @@ body {
   cursor: pointer;
   top: 0;
   transition: all 0.25s;
-}
-.tab-label:hover {
-  top: -0.25rem;
-  transition: top 0.25s;
+
+  &:hover {
+    top: -0.25rem;
+    transition: top 0.25s;
+  }
 }
 .tab-content {
   height: 100%;
