@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import { TYPE_BASE } from '../config/configs'
 import selectDropBox from './selectDropBox.vue'
 import HDE from '../plugin'
 
@@ -9,6 +8,8 @@ defineProps(['fieldsList'])
 const emit = defineEmits(['inputChange'])
 
 const inputChange = () => emit('inputChange', FieldsValues.value)
+
+const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
 const FieldsValues = ref([])
 const parentIssuesArr = ref([])

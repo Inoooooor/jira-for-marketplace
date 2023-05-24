@@ -4,10 +4,10 @@ import { ref, computed, provide } from 'vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
-import { TYPE_BASE } from '../config/configs'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
 
-// variables
+const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
+
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
@@ -16,7 +16,7 @@ const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=proje
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
 const response = ref(null)
-let chosenProject = ref(0)
+let chosenProject = ref(1)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
@@ -27,18 +27,17 @@ const listenerForMultiCheckboxErase = ref(0)
 
 provide('buttonClickListener', listenerForMultiCheckboxErase)
 
+const isFieldCustom = (field) => {
+  const fieldFilters = ['summary', 'description', 'issuetype', 'project']
+  if (!fieldFilters.includes(field.key) && field.required) return true
+  return false
+}
+
 const fieldsList = computed(() =>
   Object.values(
     response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
       .fields
-  ).filter(
-    (field) =>
-      field.required === true &&
-      field.key !== 'summary' &&
-      field.key !== 'description' &&
-      field.key !== 'issuetype' &&
-      field.key !== 'project'
-  )
+  ).filter((field) => isFieldCustom(field))
 )
 
 //functions
@@ -141,6 +140,7 @@ const createIssueDataMaker = (hdeIdList) => {
     basicFieldsObj[field.key] = customFieldsValues.value[index]
     return
   })
+  if (import.meta.env.DEV) console.log(basicFieldsObj)
   return basicFieldsObj
 }
 
