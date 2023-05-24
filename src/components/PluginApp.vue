@@ -118,7 +118,7 @@ const createDataForIssue = (hdeIdList) => {
   basicFieldsObj = addCustomFields(basicFieldsObj)
 
   if (import.meta.env.DEV) console.log(basicFieldsObj)
-  return basicFieldsObj
+  return { fields: basicFieldsObj }
 }
 
 const createIssue = async () => {
@@ -133,9 +133,7 @@ const createIssue = async () => {
       url: createIssueUrl,
       method: 'POST',
       contentType: 'application/json',
-      data: {
-        fields: createDataForIssue(hdeIdList),
-      },
+      data: createDataForIssue(hdeIdList),
     })
     if (data.errors) {
       alert(JSON.stringify(data.errors))
@@ -182,7 +180,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
         <label for="tab-1" class="tab-label">Создать задачи</label>
         <div class="tab-content w-full h-full">
           <form
-            v-if="response && true"
+            v-if="response"
             @submit.prevent="createIssue()"
             action=""
             class="grid grid-rows-10 gap-2 h-full"
