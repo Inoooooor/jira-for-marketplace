@@ -23,7 +23,7 @@ let descriptionValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
 const customFieldsValues = ref([])
-const chosenIssueTypeIndex = ref(0)
+const chosenIssueType = ref(0)
 const listenerForMultiCheckboxErase = ref(0)
 
 provide('buttonClickListener', listenerForMultiCheckboxErase)
@@ -36,8 +36,7 @@ const isFieldCustom = (field) => {
 
 const fieldsList = computed(() =>
   Object.values(
-    response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
-      .fields
+    response.value[chosenProject.value].issuetypes[chosenIssueType.value].fields
   ).filter((field) => isFieldCustom(field))
 )
 
@@ -81,8 +80,7 @@ const createIssueDataMaker = (hdeIdList) => {
     description: descriptionValue.value,
     hdeTicketId: uniqueId,
     issuetype:
-      response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
-        .id,
+      response.value[chosenProject.value].issuetypes[chosenIssueType.value].id,
     reporter: reporterValue.value,
     hdeChildTickets: hdeIdList,
   })
@@ -154,7 +152,7 @@ getQuery()
 
 // Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
-  chosenIssueTypeIndex.value = 0
+  chosenIssueType.value = 0
   customFieldsValues.value.length = 0
 }
 
@@ -210,7 +208,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 name=""
                 id="issueType"
                 class="centered-form-field"
-                v-model="chosenIssueTypeIndex"
+                v-model="chosenIssueType"
                 @change="clearInput()"
               >
                 <option
