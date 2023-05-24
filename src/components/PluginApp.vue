@@ -5,6 +5,7 @@ import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
+import { createBasicFields } from '../utils/createBasicFields'
 
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
@@ -74,67 +75,41 @@ const getReportersList = async () => {
 getReportersList()
 
 const createIssueDataMaker = (hdeIdList) => {
-  const basicFieldsObj = {
-    project: {
-      key: response.value[chosenProject.value].key,
-    },
-    summary: `${summaryValue.value} ${uniqueId}`,
-    description: {
-      content: [
-        {
-          content: [
-            {
-              text: `${descriptionValue.value}${hdeIdList}`,
-              type: 'text',
-            },
-          ],
-          type: 'paragraph',
-        },
-      ],
-      type: 'doc',
-      version: 1,
-    },
-    issuetype: {
-      id: response.value[chosenProject.value].issuetypes[
-        chosenIssueTypeIndex.value
-      ].id,
-    },
-    reporter: reporterValue.value
-      ? {
-          id: reporterValue.value,
-        }
-      : null,
-  }
+  const basicFieldsObj = createBasicFields({
+    project: response.value[chosenProject.value].key,
+    summary: summaryValue.value,
+    description: descriptionValue.value,
+    hdeTicketId: uniqueId,
+    issuetype:
+      response.value[chosenProject.value].issuetypes[chosenIssueTypeIndex.value]
+        .id,
+    reporter: reporterValue.value,
+    hdeChildTickets: hdeIdList,
+  })
+
+  let customFieldsFilter = [
+    'textfield',
+    'float',
+    'url',
+    'datepicker',
+    'multicheckboxes',
+  ]
+  customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
+
   fieldsList.value.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicFieldsObj[field.key] = {
         value: customFieldsValues.value[index],
       }
-      return
-    }
-    // Добавил в конец строки пустой символ. HDE request отказывается принимать в строку число,
-    // которое является строкой, но работает с любым числом в котором есть любой символ
-    else if (field.schema.custom === TYPE_BASE + 'textfield') {
-      basicFieldsObj[field.key] = customFieldsValues.value[index] + 'ㅤ'
-      return
-    } else if (field.schema.custom === TYPE_BASE + 'float') {
-      basicFieldsObj[field.key] = +customFieldsValues.value[index]
-      return
-    } else if (field.schema.custom === TYPE_BASE + 'url') {
+    } else if (customFieldsFilter.includes(field.schema.custom)) {
       basicFieldsObj[field.key] = customFieldsValues.value[index]
-      return
-    } else if (field.schema.custom === TYPE_BASE + 'datepicker') {
-      basicFieldsObj[field.key] = customFieldsValues.value[index]
-      return
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicFieldsObj[field.key] = makeArrayFromCheckboxes(
         JSON.parse(customFieldsValues.value[index]),
         field.allowedValues
       )
-      return
     } else if (field.schema.type === 'issuelink') {
       basicFieldsObj[field.key] = { key: customFieldsValues.value[index] }
-      return
     }
   })
   if (import.meta.env.DEV) console.log(basicFieldsObj)
