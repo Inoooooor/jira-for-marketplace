@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import HDE from '../plugin'
 
@@ -8,6 +8,20 @@ export const useJiraForm = defineStore('jiraForm', () => {
   const getCreateMetaUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 
   const response = ref(null)
+  const chosenProject = ref(1)
+  const chosenIssueType = ref(0)
+
+  const isFieldCustom = (field) => {
+    const fieldFilters = ['summary', 'description', 'issuetype', 'project']
+    if (!fieldFilters.includes(field.key) && field.required) return true
+    return false
+  }
+
+  const fieldsList = computed(() =>
+    Object.values(
+      response[chosenProject.value].issuetypes[chosenIssueType.value].fields
+    ).filter((field) => isFieldCustom(field))
+  )
 
   const getCreateMeta = async () => {
     try {
@@ -24,5 +38,5 @@ export const useJiraForm = defineStore('jiraForm', () => {
     }
   }
 
-  return { getCreateMeta, response }
+  return { getCreateMeta, response, fieldsList, chosenProject, chosenIssueType }
 })
