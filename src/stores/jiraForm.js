@@ -11,6 +11,8 @@ export const useJiraForm = defineStore('jiraForm', () => {
   const chosenProject = ref(1)
   const chosenIssueType = ref(0)
   const customFieldsValues = ref([])
+  const reporter = ref('')
+  // const summaryField = ref('')
 
   const resetChosenIssueType = () => {
     chosenIssueType.value = 0
@@ -54,6 +56,7 @@ export const useJiraForm = defineStore('jiraForm', () => {
     chosenProject,
     chosenIssueType,
     customFieldsValues,
+    reporter,
     resetChosenIssueType,
     getCreateMeta,
     clearCustomFields,

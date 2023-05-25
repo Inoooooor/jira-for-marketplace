@@ -5,13 +5,8 @@ import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
 
-const emit = defineEmits(['inputChange'])
-
-const inputChange = () => emit('inputChange', FieldsValues.value)
-
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
-const FieldsValues = ref([])
 const parentIssuesArr = ref([])
 const { systemDomain } = HDE.vars
 const parentIssuesUrl = `https://${systemDomain}/rest/api/3/search?maxResults=10000&fields=id`
@@ -33,9 +28,7 @@ const getParentIssues = async () => {
 getParentIssues()
 
 const checkBoxChange = (checkBoxArray, index) => {
-  FieldsValues.value[index] = checkBoxArray
   store.customFieldsValues[index] = checkBoxArray
-  inputChange()
 }
 </script>
 <template>
@@ -53,7 +46,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
-        @input="inputChange()"
         v-model="store.customFieldsValues[index]"
       />
     </template>
@@ -65,7 +57,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
-        @input="inputChange()"
         v-model="store.customFieldsValues[index]"
       />
     </template>
@@ -78,7 +69,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         required
         maxlength="80"
         class="wide-form-field border border-gray-300 rounded"
-        @input="inputChange()"
         v-model="store.customFieldsValues[index]"
       />
     </template>
@@ -90,7 +80,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         min="1"
         step="0.001"
         class="wide-form-field border border-gray-300 rounded"
-        @input="inputChange()"
         v-model="store.customFieldsValues[index]"
       />
     </template>
@@ -102,7 +91,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         min="1943-01-01"
         max="2039-12-31"
         class="wide-form-field border border-gray-300 rounded h-full"
-        @input="inputChange()"
         v-model="store.customFieldsValues[index]"
       />
     </template>
@@ -111,7 +99,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         :id="field.key"
         required
         class="wide-form-field border border-gray-300 rounded h-full"
-        @change="inputChange()"
         v-model="store.customFieldsValues[index]"
       >
         <option
@@ -130,7 +117,6 @@ const checkBoxChange = (checkBoxArray, index) => {
         :id="field.key"
         required
         class="wide-form-field border border-gray-300 rounded h-full"
-        @change="inputChange()"
         v-model="store.customFieldsValues[index]"
       >
         <option

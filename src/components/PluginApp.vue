@@ -4,6 +4,8 @@ import { ref, provide } from 'vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
+import JiraProjectFIeld from './JiraProjectField.vue'
+import JiraReporterField from './JiraReporterField.vue'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
 import { createBasicFields } from '../utils/createBasicFields'
 import { useJiraForm } from '../stores/jiraForm'
@@ -23,7 +25,7 @@ const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
-let reporterValue = ref('')
+// let reporterValue = ref('')
 const customFieldsValues = ref([])
 const listenerForMultiCheckboxErase = ref(0)
 
@@ -79,7 +81,7 @@ const createDataForIssue = (hdeIdList) => {
     hdeTicketId: uniqueId,
     issuetype:
       store.response[store.chosenProject].issuetypes[store.chosenIssueType].id,
-    reporter: reporterValue.value,
+    reporter: store.reporter,
     hdeChildTickets: hdeIdList,
   })
 
@@ -124,12 +126,6 @@ const clearInput = () => {
 
 // getQuery()
 
-// Избегание ошибки отрисовки несуществующего типа проблемы
-const zerofier = () => {
-  store.resetChosenIssueType()
-  store.clearCustomFields()
-}
-
 const fillValuesFromFields = (emittedFieldsArray) => {
   customFieldsValues.value = emittedFieldsArray
 }
@@ -154,7 +150,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             action=""
             class="grid grid-rows-10 gap-2 h-full"
           >
-            <div class="grid grid-cols-12 h-10">
+            <!-- <div class="grid grid-cols-12 h-10">
               <label for="jiraProject" class="form-labels-pos required-field"
                 >Проект</label
               >
@@ -173,7 +169,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                   {{ project.name }}
                 </option>
               </select>
-            </div>
+            </div> -->
+            <JiraProjectFIeld />
             <div class="grid grid-cols-12 h-10">
               <label for="issueType" class="form-labels-pos required-field"
                 >Тип проблемы</label
@@ -196,7 +193,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               </select>
             </div>
 
-            <template v-if="reportersList">
+            <!-- <template v-if="reportersList">
               <div class="grid grid-cols-12 h-10">
                 <label for="author" class="form-labels-pos">Автор</label>
                 <select
@@ -215,7 +212,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                   </option>
                 </select>
               </div>
-            </template>
+            </template> -->
+            <JiraReporterField />
             <div
               class="grid grid-cols-12 place-items-start content-center border-b"
             >
