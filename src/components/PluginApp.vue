@@ -22,7 +22,6 @@ const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
 // let reporterValue = ref('')
@@ -76,7 +75,7 @@ const addCustomFields = (basicObj) => {
 const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
     project: store.response[store.chosenProject].key,
-    summary: summaryValue.value,
+    summary: store.summaryField,
     description: descriptionValue.value,
     hdeTicketId: uniqueId,
     issuetype:
@@ -94,7 +93,7 @@ const createDataForIssue = (hdeIdList) => {
 
 const createIssue = async () => {
   try {
-    if (!summaryValue.value || !descriptionValue.value) {
+    if (!store.summaryField || !descriptionValue.value) {
       alert('Заполните все поля')
       return
     }
@@ -118,7 +117,7 @@ const createIssue = async () => {
 }
 
 const clearInput = () => {
-  summaryValue.value = ''
+  store.summaryField = ''
   descriptionValue.value = ''
   store.clearCustomFields()
   listenerForMultiCheckboxErase.value++
@@ -192,7 +191,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 </option>
               </select>
             </div>
-
             <!-- <template v-if="reportersList">
               <div class="grid grid-cols-12 h-10">
                 <label for="author" class="form-labels-pos">Автор</label>
@@ -235,7 +233,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 id="subject"
                 class="wide-form-field border-gray-500 border"
                 placeholder="Дайте здесь сводку проблемы"
-                v-model="summaryValue"
+                v-model="store.summaryField"
               />
             </div>
             <div class="grid grid-cols-12">
