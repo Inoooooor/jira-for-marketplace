@@ -34,6 +34,7 @@ getParentIssues()
 
 const checkBoxChange = (checkBoxArray, index) => {
   FieldsValues.value[index] = checkBoxArray
+  store.customFieldsValues[index] = checkBoxArray
   inputChange()
 }
 </script>
@@ -53,7 +54,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         type="text"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template
@@ -65,7 +66,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         type="text"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
@@ -78,7 +79,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         maxlength="80"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
@@ -90,7 +91,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         step="0.001"
         class="wide-form-field border border-gray-300 rounded"
         @input="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
@@ -102,7 +103,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         max="2039-12-31"
         class="wide-form-field border border-gray-300 rounded h-full"
         @input="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
@@ -111,7 +112,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         required
         class="wide-form-field border border-gray-300 rounded h-full"
         @change="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       >
         <option
           v-for="(option, index) in field.allowedValues"
@@ -130,7 +131,7 @@ const checkBoxChange = (checkBoxArray, index) => {
         required
         class="wide-form-field border border-gray-300 rounded h-full"
         @change="inputChange()"
-        v-model="FieldsValues[index]"
+        v-model="store.customFieldsValues[index]"
       >
         <option
           v-for="(option, index) in parentIssuesArr"

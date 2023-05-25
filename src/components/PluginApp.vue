@@ -55,17 +55,17 @@ const addCustomFields = (basicObj) => {
   store.customFieldsToRender.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicObj[field.key] = {
-        value: customFieldsValues.value[index],
+        value: store.customFieldsValues[index],
       }
     } else if (customFieldsFilter.includes(field.schema.custom)) {
-      basicObj[field.key] = customFieldsValues.value[index]
+      basicObj[field.key] = store.customFieldsValues[index]
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicObj[field.key] = makeArrayFromCheckboxes(
-        customFieldsValues.value[index],
+        store.customFieldsValues[index],
         field.allowedValues
       )
     } else if (field.schema.type === 'issuelink') {
-      basicObj[field.key] = { key: customFieldsValues.value[index] }
+      basicObj[field.key] = { key: store.customFieldsValues[index] }
     }
   })
   return basicObj
@@ -118,7 +118,7 @@ const createIssue = async () => {
 const clearInput = () => {
   summaryValue.value = ''
   descriptionValue.value = ''
-  customFieldsValues.value.length = 0
+  store.clearCustomFields()
   listenerForMultiCheckboxErase.value++
 }
 
@@ -127,7 +127,7 @@ const clearInput = () => {
 // Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
   store.resetChosenIssueType()
-  customFieldsValues.value.length = 0
+  store.clearCustomFields()
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
