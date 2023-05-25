@@ -1,6 +1,6 @@
 <script setup>
 import HDE from '../plugin'
-import { ref, computed, provide } from 'vue'
+import { ref, provide } from 'vue'
 import { addIdToDescription } from '../utils/idToJiraDescription.js'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
@@ -18,47 +18,16 @@ const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
-// const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-// const response = ref(null)
-let chosenProject = ref(1)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
 let reporterValue = ref('')
 const customFieldsValues = ref([])
-const chosenIssueType = ref(0)
 const listenerForMultiCheckboxErase = ref(0)
 
 provide('buttonClickListener', listenerForMultiCheckboxErase)
-
-const isFieldCustom = (field) => {
-  const fieldFilters = ['summary', 'description', 'issuetype', 'project']
-  if (!fieldFilters.includes(field.key) && field.required) return true
-  return false
-}
-
-const fieldsList = computed(() =>
-  Object.values(
-    store.response[chosenProject.value].issuetypes[chosenIssueType.value].fields
-  ).filter((field) => isFieldCustom(field))
-)
-
-//functions
-// const getQuery = async () => {
-//   try {
-//     const { data } = await HDE.request({
-//       auth: 'JiraAuth',
-//       url: getUrl,
-//       method: 'GET',
-//       contentType: 'application/json',
-//     })
-//     response.value = data.projects
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 
 const getReportersList = async () => {
   try {
@@ -89,7 +58,7 @@ const addCustomFields = (basicObj) => {
 
   customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
 
-  fieldsList.value.forEach((field, index) => {
+  store.customFieldsToRender.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicObj[field.key] = {
         value: customFieldsValues.value[index],
@@ -110,12 +79,12 @@ const addCustomFields = (basicObj) => {
 
 const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
-    project: store.response[chosenProject.value].key,
+    project: store.response[store.chosenProject].key,
     summary: summaryValue.value,
     description: descriptionValue.value,
     hdeTicketId: uniqueId,
     issuetype:
-      store.response[chosenProject.value].issuetypes[chosenIssueType.value].id,
+      store.response[store.chosenProject].issuetypes[store.chosenIssueType].id,
     reporter: reporterValue.value,
     hdeChildTickets: hdeIdList,
   })
@@ -163,7 +132,7 @@ const clearInput = () => {
 
 // Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
-  chosenIssueType.value = 0
+  store.resetChosenIssueType()
   customFieldsValues.value.length = 0
 }
 
@@ -199,7 +168,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 name="jiraProject"
                 id="jiraProject"
                 class="centered-form-field"
-                v-model="chosenProject"
+                v-model="store.chosenProject"
                 @change="zerofier()"
               >
                 <option
@@ -219,11 +188,11 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 name=""
                 id="issueType"
                 class="centered-form-field"
-                v-model="chosenIssueType"
+                v-model="store.chosenIssueType"
                 @change="clearInput()"
               >
                 <option
-                  v-for="(issue, index) in store.response[chosenProject]
+                  v-for="(issue, index) in store.response[store.chosenProject]
                     .issuetypes"
                   :value="index"
                   :key="index"
@@ -291,7 +260,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               ></textarea>
             </div>
             <customFieldsGenerator
-              :fieldsList="fieldsList"
               @input-change="fillValuesFromFields($event)"
             />
             <div class="grid grid-cols-12">

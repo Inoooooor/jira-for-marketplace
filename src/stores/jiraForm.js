@@ -11,15 +11,20 @@ export const useJiraForm = defineStore('jiraForm', () => {
   const chosenProject = ref(1)
   const chosenIssueType = ref(0)
 
+  const resetChosenIssueType = () => {
+    chosenIssueType.value = 0
+  }
+
   const isFieldCustom = (field) => {
     const fieldFilters = ['summary', 'description', 'issuetype', 'project']
     if (!fieldFilters.includes(field.key) && field.required) return true
     return false
   }
 
-  const fieldsList = computed(() =>
+  const customFieldsToRender = computed(() =>
     Object.values(
-      response[chosenProject.value].issuetypes[chosenIssueType.value].fields
+      response.value[chosenProject.value].issuetypes[chosenIssueType.value]
+        .fields
     ).filter((field) => isFieldCustom(field))
   )
 
@@ -38,5 +43,12 @@ export const useJiraForm = defineStore('jiraForm', () => {
     }
   }
 
-  return { getCreateMeta, response, fieldsList, chosenProject, chosenIssueType }
+  return {
+    getCreateMeta,
+    response,
+    customFieldsToRender,
+    chosenProject,
+    chosenIssueType,
+    resetChosenIssueType,
+  }
 })

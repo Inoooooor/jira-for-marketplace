@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import selectDropBox from './selectDropBox.vue'
 import HDE from '../plugin'
-
-defineProps(['fieldsList'])
+import { useJiraForm } from '../stores/jiraForm'
+const store = useJiraForm()
 
 const emit = defineEmits(['inputChange'])
 
@@ -40,7 +40,7 @@ const checkBoxChange = (checkBoxArray, index) => {
 <template>
   <div
     class="grid grid-cols-12 h-10"
-    v-for="(field, index) in fieldsList"
+    v-for="(field, index) in store.customFieldsToRender"
     :key="index"
   >
     <label :for="field.key" class="form-labels-pos required-field">{{
