@@ -6,6 +6,11 @@ import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
 import { createBasicFields } from '../utils/createBasicFields'
+import { useJiraForm } from '../stores/jiraForm'
+
+const store = useJiraForm()
+
+store.getCreateMeta()
 
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
@@ -13,10 +18,10 @@ const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
-const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
+// const getUrl = `https://${systemDomain}/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-const response = ref(null)
+// const response = ref(null)
 let chosenProject = ref(1)
 let summaryValue = ref('')
 let descriptionValue = ref('')
@@ -36,24 +41,24 @@ const isFieldCustom = (field) => {
 
 const fieldsList = computed(() =>
   Object.values(
-    response.value[chosenProject.value].issuetypes[chosenIssueType.value].fields
+    store.response[chosenProject.value].issuetypes[chosenIssueType.value].fields
   ).filter((field) => isFieldCustom(field))
 )
 
 //functions
-const getQuery = async () => {
-  try {
-    const { data } = await HDE.request({
-      auth: 'JiraAuth',
-      url: getUrl,
-      method: 'GET',
-      contentType: 'application/json',
-    })
-    response.value = data.projects
-  } catch (error) {
-    console.log(error)
-  }
-}
+// const getQuery = async () => {
+//   try {
+//     const { data } = await HDE.request({
+//       auth: 'JiraAuth',
+//       url: getUrl,
+//       method: 'GET',
+//       contentType: 'application/json',
+//     })
+//     response.value = data.projects
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
 const getReportersList = async () => {
   try {
@@ -105,12 +110,12 @@ const addCustomFields = (basicObj) => {
 
 const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
-    project: response.value[chosenProject.value].key,
+    project: store.response[chosenProject.value].key,
     summary: summaryValue.value,
     description: descriptionValue.value,
     hdeTicketId: uniqueId,
     issuetype:
-      response.value[chosenProject.value].issuetypes[chosenIssueType.value].id,
+      store.response[chosenProject.value].issuetypes[chosenIssueType.value].id,
     reporter: reporterValue.value,
     hdeChildTickets: hdeIdList,
   })
@@ -118,6 +123,7 @@ const createDataForIssue = (hdeIdList) => {
   basicFieldsObj = addCustomFields(basicFieldsObj)
 
   if (import.meta.env.DEV) console.log(basicFieldsObj)
+
   return { fields: basicFieldsObj }
 }
 
@@ -153,7 +159,7 @@ const clearInput = () => {
   listenerForMultiCheckboxErase.value++
 }
 
-getQuery()
+// getQuery()
 
 // Избегание ошибки отрисовки несуществующего типа проблемы
 const zerofier = () => {
@@ -180,7 +186,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
         <label for="tab-1" class="tab-label">Создать задачи</label>
         <div class="tab-content w-full h-full">
           <form
-            v-if="response"
+            v-if="store.response"
             @submit.prevent="createIssue()"
             action=""
             class="grid grid-rows-10 gap-2 h-full"
@@ -197,7 +203,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 @change="zerofier()"
               >
                 <option
-                  v-for="(project, index) in response"
+                  v-for="(project, index) in store.response"
                   :key="index"
                   :value="index"
                 >
@@ -217,7 +223,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 @change="clearInput()"
               >
                 <option
-                  v-for="(issue, index) in response[chosenProject].issuetypes"
+                  v-for="(issue, index) in store.response[chosenProject]
+                    .issuetypes"
                   :value="index"
                   :key="index"
                 >
