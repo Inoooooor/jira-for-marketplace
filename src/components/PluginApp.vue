@@ -48,13 +48,7 @@ const getReportersList = async () => {
 getReportersList()
 
 const addCustomFields = (basicObj) => {
-  let customFieldsFilter = [
-    'textfield',
-    'float',
-    'url',
-    'datepicker',
-    'multicheckboxes',
-  ]
+  let customFieldsFilter = ['textfield', 'float', 'url', 'datepicker']
 
   customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
 
@@ -67,7 +61,7 @@ const addCustomFields = (basicObj) => {
       basicObj[field.key] = customFieldsValues.value[index]
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicObj[field.key] = makeArrayFromCheckboxes(
-        JSON.parse(customFieldsValues.value[index]),
+        customFieldsValues.value[index],
         field.allowedValues
       )
     } else if (field.schema.type === 'issuelink') {

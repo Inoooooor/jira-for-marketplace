@@ -44,11 +44,11 @@ export const useJiraForm = defineStore('jiraForm', () => {
   }
 
   return {
-    getCreateMeta,
     response,
     customFieldsToRender,
     chosenProject,
     chosenIssueType,
     resetChosenIssueType,
+    getCreateMeta,
   }
 })

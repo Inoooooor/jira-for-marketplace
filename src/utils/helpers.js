@@ -1,6 +1,8 @@
 const makeArrayFromCheckboxes = (checkBoxesValues, allowedValues) => {
   const basicArr = []
-  checkBoxesValues.forEach((checked, index) => {
+  console.log(JSON.parse(checkBoxesValues))
+  console.log(allowedValues)
+  JSON.parse(checkBoxesValues).forEach((checked, index) => {
     if (checked === true) basicArr.push({ value: allowedValues[index].value })
   })
   return basicArr
