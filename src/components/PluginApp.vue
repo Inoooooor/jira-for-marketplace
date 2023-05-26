@@ -76,12 +76,11 @@ const addCustomFields = (basicObj) => {
 
 const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
-    project: store.response[store.chosenProject].key,
+    project: store.projectKey,
     summary: store.summaryField,
     description: store.descriptionField,
     hdeTicketId: uniqueId,
-    issuetype:
-      store.response[store.chosenProject].issuetypes[store.chosenIssueType].id,
+    issuetype: store.issueTypeId,
     reporter: store.reporter,
     hdeChildTickets: hdeIdList,
   })
