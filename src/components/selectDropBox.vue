@@ -17,6 +17,8 @@ const uniqueCheckboxId = `list ${Math.random() * 1e18}`
 
 const tabsWrapper = document.querySelector('.tabs')
 
+const clearValues = () => (checkBoxValues.value.length = 0)
+
 const dropDownHide = () => {
   const checkList = document.getElementById(uniqueCheckboxId)
   if (checkList?.classList.contains('visible'))
@@ -38,7 +40,7 @@ onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
 
 onUnmounted(() => tabsWrapper.removeEventListener('click', dropDownHide))
 
-watch(formSubmitCount, () => (checkBoxValues.value.length = 0))
+watch(formSubmitCount, clearValues)
 </script>
 <template>
   <div :id="uniqueCheckboxId" class="dropdown-check-list" tabindex="100">
