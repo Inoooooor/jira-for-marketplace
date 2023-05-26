@@ -17,8 +17,6 @@ import { useJiraForm } from '../stores/jiraForm'
 
 const store = useJiraForm()
 
-store.getCreateMeta()
-
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
@@ -94,6 +92,8 @@ const createIssue = async () => {
 const fillValuesFromFields = (emittedFieldsArray) => {
   customFieldsValues.value = emittedFieldsArray
 }
+
+store.getCreateMeta()
 </script>
 
 <template>
