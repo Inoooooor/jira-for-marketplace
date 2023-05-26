@@ -8,6 +8,7 @@ import JiraProjectFIeld from './JiraProjectField.vue'
 import JiraReporterField from './JiraReporterField.vue'
 import JiraSpectatorCheckbox from './JiraSpectatorCheckbox.vue'
 import JiraSummaryField from './JiraSummaryField.vue'
+import JiraDescriptionField from './JiraDescriptionField.vue'
 import { makeArrayFromCheckboxes } from '../utils/createArrayFromMulticheckbox'
 import { createBasicFields } from '../utils/createBasicFields'
 import { useJiraForm } from '../stores/jiraForm'
@@ -24,7 +25,7 @@ const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-let descriptionValue = ref('')
+// let descriptionValue = ref('')
 let reportersList = ref('')
 // let reporterValue = ref('')
 const customFieldsValues = ref([])
@@ -78,7 +79,7 @@ const createDataForIssue = (hdeIdList) => {
   let basicFieldsObj = createBasicFields({
     project: store.response[store.chosenProject].key,
     summary: store.summaryField,
-    description: descriptionValue.value,
+    description: store.descriptionField,
     hdeTicketId: uniqueId,
     issuetype:
       store.response[store.chosenProject].issuetypes[store.chosenIssueType].id,
@@ -95,7 +96,7 @@ const createDataForIssue = (hdeIdList) => {
 
 const createIssue = async () => {
   try {
-    if (!store.summaryField || !descriptionValue.value) {
+    if (!store.summaryField || !store.descriptionField) {
       alert('Заполните все поля')
       return
     }
@@ -119,8 +120,6 @@ const createIssue = async () => {
 }
 
 const clearInput = () => {
-  store.summaryField = ''
-  descriptionValue.value = ''
   store.clearCustomFields()
   listenerForMultiCheckboxErase.value++
 }
@@ -240,7 +239,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               />
             </div> -->
             <JiraSummaryField />
-            <div class="grid grid-cols-12">
+            <!-- <div class="grid grid-cols-12">
               <label for="executor" class="form-labels-pos required-field"
                 >Описание</label
               >
@@ -252,7 +251,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 placeholder="Опишите здесь проблему"
                 v-model="descriptionValue"
               ></textarea>
-            </div>
+            </div> -->
+            <JiraDescriptionField />
             <customFieldsGenerator
               @input-change="fillValuesFromFields($event)"
             />

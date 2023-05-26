@@ -13,6 +13,7 @@ export const useJiraForm = defineStore('jiraForm', () => {
   const customFieldsValues = ref([])
   const reporter = ref('')
   const summaryField = ref('')
+  const descriptionField = ref('')
 
   const resetChosenIssueType = () => {
     chosenIssueType.value = 0
@@ -20,6 +21,8 @@ export const useJiraForm = defineStore('jiraForm', () => {
 
   const clearCustomFields = () => {
     customFieldsValues.value.length = 0
+    summaryField.value = ''
+    descriptionField.value = ''
   }
 
   const isFieldCustom = (field) => {
@@ -58,6 +61,7 @@ export const useJiraForm = defineStore('jiraForm', () => {
     customFieldsValues,
     reporter,
     summaryField,
+    descriptionField,
     resetChosenIssueType,
     getCreateMeta,
     clearCustomFields,
