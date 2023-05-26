@@ -10,6 +10,7 @@ import JiraSpectatorCheckbox from './JiraSpectatorCheckbox.vue'
 import JiraSummaryField from './JiraSummaryField.vue'
 import JiraDescriptionField from './JiraDescriptionField.vue'
 import JiraFormButton from './JiraFormButton.vue'
+import JiraIssueTypesField from './JiraIssueTypesField.vue'
 import { makeArrayFromCheckboxes } from '../utils/createArrayFromMulticheckbox'
 import { createBasicFields } from '../utils/createBasicFields'
 import { useJiraForm } from '../stores/jiraForm'
@@ -23,29 +24,9 @@ const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
-const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-let reportersList = ref('')
 const customFieldsValues = ref([])
-
-const getReportersList = async () => {
-  try {
-    const { data } = await HDE.request({
-      auth: 'JiraAuth',
-      url: reportersUrl,
-      method: 'GET',
-      contentType: 'application/json',
-    })
-    reportersList.value = data.filter(
-      (user) => user.accountType === 'atlassian'
-    )
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-getReportersList()
 
 const addCustomFields = (basicObj) => {
   store.customFieldsToRender.forEach((field, index) => {
@@ -104,14 +85,10 @@ const createIssue = async () => {
       return
     }
     alert('Задача создана успешно!')
-    clearInput()
+    store.clearCustomFields()
   } catch (error) {
     console.log(error)
   }
-}
-
-const clearInput = () => {
-  store.clearCustomFields()
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {
@@ -139,26 +116,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             class="grid grid-rows-10 gap-2 h-full"
           >
             <JiraProjectFIeld />
-            <div class="grid grid-cols-12 h-10">
-              <label for="issueType" class="form-labels-pos required-field"
-                >Тип проблемы</label
-              >
-              <select
-                name=""
-                id="issueType"
-                class="centered-form-field"
-                v-model="store.chosenIssueType"
-                @change="clearInput()"
-              >
-                <option
-                  v-for="(issue, index) in store.actualIssueTypes"
-                  :value="index"
-                  :key="index"
-                >
-                  {{ issue.name }}
-                </option>
-              </select>
-            </div>
+            <JiraIssueTypesField />
             <JiraReporterField />
             <JiraSpectatorCheckbox />
             <JiraSummaryField />
