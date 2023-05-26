@@ -51,17 +51,11 @@ const getReportersList = async () => {
 getReportersList()
 
 const addCustomFields = (basicObj) => {
-  let customFieldsFilter = ['textfield', 'float', 'url', 'datepicker']
-
-  customFieldsFilter = customFieldsFilter.map((item) => TYPE_BASE + item)
-
   store.customFieldsToRender.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
       basicObj[field.key] = {
         value: store.customFieldsValues[index],
       }
-    } else if (customFieldsFilter.includes(field.schema.custom)) {
-      basicObj[field.key] = store.customFieldsValues[index]
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicObj[field.key] = makeArrayFromCheckboxes(
         store.customFieldsValues[index],
