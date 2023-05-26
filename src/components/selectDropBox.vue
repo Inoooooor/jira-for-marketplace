@@ -1,18 +1,21 @@
 <script setup>
-import { ref, onUpdated, watch } from 'vue'
+import { ref, onUpdated, watch, onUnmounted } from 'vue'
 import { useJiraForm } from '../stores/jiraForm'
 import { storeToRefs } from 'pinia'
 
-const store = useJiraForm()
-
 defineProps(['checkBoxFields'])
+
+const store = useJiraForm()
 
 const emit = defineEmits(['checkBoxChange'])
 
 const checkBoxValues = ref([])
-const uniqueCheckboxId = `list ${Math.random() * 1e18}`
 
 const { formSubmitCount } = storeToRefs(store)
+
+const uniqueCheckboxId = `list ${Math.random() * 1e18}`
+
+const tabsWrapper = document.querySelector('.tabs')
 
 const dropDownHide = () => {
   const checkList = document.getElementById(uniqueCheckboxId)
@@ -20,27 +23,26 @@ const dropDownHide = () => {
     checkList.classList.remove('visible')
 }
 
-const dropDownToggle = (e) => {
+const dropDownToggle = () => {
   const checkList = document.getElementById(uniqueCheckboxId)
   if (checkList.classList.contains('visible'))
     checkList.classList.remove('visible')
   else checkList.classList.add('visible')
-  e.stopPropagation()
 }
 
 const stopListHideOnclick = (e) => e.stopPropagation()
 
-document.querySelector('.tabs').addEventListener('click', () => dropDownHide())
+tabsWrapper.addEventListener('click', dropDownHide)
 
 onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
+
+onUnmounted(() => tabsWrapper.removeEventListener('click', dropDownHide))
 
 watch(formSubmitCount, () => (checkBoxValues.value.length = 0))
 </script>
 <template>
   <div :id="uniqueCheckboxId" class="dropdown-check-list" tabindex="100">
-    <span class="anchor" @click="dropDownToggle($event)"
-      >Выберите значения</span
-    >
+    <span class="anchor" @click.stop="dropDownToggle">Выберите значения</span>
     <ul class="items" @click="stopListHideOnclick">
       <li
         class="hover:bg-gray-200"
