@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer components {
+  * {
+    @apply box-border;
+  }
+  body {
+    @apply bg-[#2c3e50] text-[#ecf0f1] leading-[1.618em];
+  }
+
   html {
     @apply bg-white font-sans;
   }

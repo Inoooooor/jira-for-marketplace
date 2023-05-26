@@ -282,14 +282,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
 </template>
 
 <style lang="scss">
-* {
-  box-sizing: border-box;
-}
-body {
-  background: #2c3e50;
-  color: #ecf0f1;
-  line-height: 1.618em;
-}
 .wrapper {
   width: 100%;
   height: 100%;
