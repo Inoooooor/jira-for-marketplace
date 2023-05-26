@@ -3,9 +3,7 @@ import { ref, onUpdated, watch, onUnmounted } from 'vue'
 import { useJiraForm } from '../stores/jiraForm'
 import { storeToRefs } from 'pinia'
 
-const props = defineProps({ checkBoxFields: { type: Array, required: true } })
-
-console.log(Array.isArray(props.checkBoxFields))
+defineProps({ checkBoxFields: { type: Array, required: true } })
 
 const store = useJiraForm()
 
