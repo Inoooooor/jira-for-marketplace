@@ -33,9 +33,9 @@ const checkBoxChange = (checkBoxArray, index) => {
 </script>
 <template>
   <div
-    class="grid grid-cols-12 h-10"
     v-for="(field, index) in store.customFieldsToRender"
-    :key="index"
+    :key="field.key"
+    class="grid grid-cols-12 h-10"
   >
     <label :for="field.key" class="form-labels-pos required-field">{{
       field.name
@@ -43,10 +43,10 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
       <input
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
-        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template
@@ -54,56 +54,56 @@ const checkBoxChange = (checkBoxArray, index) => {
     >
       <input
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         type="text"
         class="wide-form-field border border-gray-300 rounded"
-        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
       <input
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         type="url"
         pattern="https?://.*"
         placeholder="https://example.com"
         required
         maxlength="80"
         class="wide-form-field border border-gray-300 rounded"
-        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
       <input
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         type="number"
         min="1"
         step="0.001"
         class="wide-form-field border border-gray-300 rounded"
-        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
       <input
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         type="date"
         min="1943-01-01"
         max="2039-12-31"
         class="wide-form-field border border-gray-300 rounded h-full"
-        v-model="store.customFieldsValues[index]"
       />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         class="wide-form-field border border-gray-300 rounded h-full"
-        v-model="store.customFieldsValues[index]"
       >
         <option
-          v-for="(option, index) in field.allowedValues"
-          :key="index"
+          v-for="option in field.allowedValues"
+          :key="option.id"
           :value="option.value"
         >
           {{ option.value }}
@@ -115,13 +115,13 @@ const checkBoxChange = (checkBoxArray, index) => {
     >
       <select
         :id="field.key"
+        v-model="store.customFieldsValues[index]"
         required
         class="wide-form-field border border-gray-300 rounded h-full"
-        v-model="store.customFieldsValues[index]"
       >
         <option
-          v-for="(option, index) in parentIssuesArr"
-          :key="index"
+          v-for="option in parentIssuesArr"
+          :key="option.id"
           :value="option.key"
         >
           {{ option.key }}
@@ -131,7 +131,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
       <JiraSelectDropBox
         :check-box-fields="field.allowedValues"
-        @checkBoxChange="checkBoxChange($event, index)"
+        @check-box-change="checkBoxChange($event, index)"
       />
     </template>
   </div>

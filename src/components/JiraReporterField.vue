@@ -30,17 +30,12 @@ getReportersList()
 <template v-if="reporters">
   <div class="grid grid-cols-12 h-10">
     <label for="author" class="form-labels-pos">Автор</label>
-    <select
-      v-model="store.reporter"
-      name=""
-      id="author"
-      class="centered-form-field"
-    >
+    <select id="author" v-model="store.reporter" class="centered-form-field">
       <option value="">Не определен</option>
       <option
-        v-for="(reporter, index) in reporters"
+        v-for="reporter in reporters"
+        :key="reporter.accountId"
         :value="reporter.accountId"
-        :key="index"
       >
         {{ reporter.displayName }}
       </option>

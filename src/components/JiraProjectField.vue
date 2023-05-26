@@ -15,15 +15,15 @@ const zerofier = () => {
       >Проект</label
     >
     <select
-      name="jiraProject"
       id="jiraProject"
-      class="centered-form-field"
       v-model="store.chosenProject"
+      name="jiraProject"
+      class="centered-form-field"
       @change="zerofier()"
     >
       <option
         v-for="(project, index) in store.response"
-        :key="index"
+        :key="project.id"
         :value="index"
       >
         {{ project.name }}

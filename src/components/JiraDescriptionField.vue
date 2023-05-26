@@ -8,12 +8,12 @@ const store = useJiraForm()
       >Описание</label
     >
     <textarea
+      id="executor"
+      v-model="store.descriptionField"
       name="executor"
       required
-      id="executor"
       class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
       placeholder="Опишите здесь проблему"
-      v-model="store.descriptionField"
     ></textarea>
   </div>
 </template>

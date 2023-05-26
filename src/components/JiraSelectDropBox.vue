@@ -48,7 +48,7 @@ watch(formSubmitCount, clearValues)
     <ul class="items" @click="stopListHideOnclick">
       <li
         v-for="(option, index) in checkBoxFields"
-        :key="index"
+        :key="option.id"
         class="hover:bg-gray-200"
       >
         <input

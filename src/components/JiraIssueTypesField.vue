@@ -8,16 +8,15 @@ const store = useJiraForm()
       >Тип проблемы</label
     >
     <select
-      name=""
       id="issueType"
-      class="centered-form-field"
       v-model="store.chosenIssueType"
+      class="centered-form-field"
       @change="store.clearCustomFields"
     >
       <option
         v-for="(issue, index) in store.actualIssueTypes"
+        :key="issue.id"
         :value="index"
-        :key="index"
       >
         {{ issue.name }}
       </option>
