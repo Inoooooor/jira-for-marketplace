@@ -1,7 +1,7 @@
 <script setup>
 import HDE from '../plugin'
 import { ref } from 'vue'
-import { addIdToDescription } from '../utils/addChildTicketsToDescription'
+import addChildTicketsToDescription from '../utils/addChildTicketsToDescription'
 import CorpLoadingScreen from './CorpLoadingScreen.vue'
 import JiraCustomFieldsGenerator from './JiraCustomFieldsGenerator.vue'
 import JiraProjectFIeld from './JiraProjectField.vue'
@@ -70,7 +70,7 @@ const createIssue = async () => {
       alert('Заполните все поля')
       return
     }
-    const hdeIdList = await addIdToDescription()
+    const hdeIdList = await addChildTicketsToDescription()
     const { data } = await HDE.request({
       auth: 'JiraAuth',
       url: createIssueUrl,

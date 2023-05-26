@@ -1,5 +1,5 @@
 import HDE from '../plugin'
-const addIdToDescription = async () => {
+const addChildTicketsToDescription = async () => {
   try {
     const { hdeSystemDomain } = HDE.vars
     const { ticketId } = HDE.getState()
@@ -27,5 +27,4 @@ const addIdToDescription = async () => {
     console.log(error)
   }
 }
-addIdToDescription()
-export { addIdToDescription }
+export default addChildTicketsToDescription
