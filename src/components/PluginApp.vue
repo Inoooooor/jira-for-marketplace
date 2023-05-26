@@ -69,6 +69,8 @@ const addCustomFields = (basicObj) => {
       )
     } else if (field.schema.type === 'issuelink') {
       basicObj[field.key] = { key: store.customFieldsValues[index] }
+    } else {
+      basicObj[field.key] = store.customFieldsValues[index]
     }
   })
   return basicObj
