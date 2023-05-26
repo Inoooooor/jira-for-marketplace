@@ -2,8 +2,8 @@
 import HDE from '../plugin'
 import { ref } from 'vue'
 import { addIdToDescription } from '../utils/addChildTicketsToDescription'
-import loadingScreen from './loadingScreen.vue'
-import customFieldsGenerator from './customFieldsGenerator.vue'
+import CorpLoadingScreen from './CorpLoadingScreen.vue'
+import JiraCustomFieldsGenerator from './JiraCustomFieldsGenerator.vue'
 import JiraProjectFIeld from './JiraProjectField.vue'
 import JiraReporterField from './JiraReporterField.vue'
 import JiraSpectatorCheckbox from './JiraSpectatorCheckbox.vue'
@@ -121,13 +121,13 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             <JiraSpectatorCheckbox />
             <JiraSummaryField />
             <JiraDescriptionField />
-            <customFieldsGenerator
+            <JiraCustomFieldsGenerator
               @input-change="fillValuesFromFields($event)"
             />
             <JiraFormButton />
           </form>
           <template v-else>
-            <loadingScreen />
+            <CorpLoadingScreen />
           </template>
         </div>
       </div>
@@ -136,7 +136,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
         <input type="radio" name="css-tabs" id="tab-2" class="tab-switch" />
         <label for="tab-2" class="tab-label">Связать задачи</label>
         <div class="tab-content w-full grid grid-rows-[1fr_minmax(100px,_7fr)]">
-          <bindIssuesTab />
+          <BindIssuesTab />
         </div>
       </div> -->
     </div>

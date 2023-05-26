@@ -1,10 +1,10 @@
 <script setup>
-import PluginApp from './components/PluginApp.vue'
+import JiraForm from './components/JiraForm.vue'
 </script>
 
 <template>
   <div class="plugin">
-    <PluginApp />
+    <JiraForm />
   </div>
 </template>
 

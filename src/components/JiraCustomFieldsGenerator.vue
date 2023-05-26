@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import selectDropBox from './selectDropBox.vue'
+import JiraSelectDropBox from './JiraSelectDropBox.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
@@ -129,7 +129,7 @@ const checkBoxChange = (checkBoxArray, index) => {
       </select>
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
-      <selectDropBox
+      <JiraSelectDropBox
         :checkBoxFields="field.allowedValues"
         @checkBoxChange="checkBoxChange($event, index)"
       />
