@@ -1,6 +1,6 @@
 <script setup>
 import HDE from '../plugin'
-import { ref, provide } from 'vue'
+import { ref } from 'vue'
 import { addIdToDescription } from '../utils/addChildTicketsToDescription'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
@@ -28,9 +28,6 @@ const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
 let reportersList = ref('')
 const customFieldsValues = ref([])
-const listenerForMultiCheckboxErase = ref(0)
-
-provide('buttonClickListener', listenerForMultiCheckboxErase)
 
 const getReportersList = async () => {
   try {
@@ -115,7 +112,6 @@ const createIssue = async () => {
 
 const clearInput = () => {
   store.clearCustomFields()
-  listenerForMultiCheckboxErase.value++
 }
 
 const fillValuesFromFields = (emittedFieldsArray) => {

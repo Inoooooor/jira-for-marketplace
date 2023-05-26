@@ -12,18 +12,18 @@ export const useJiraForm = defineStore('jiraForm', () => {
   const chosenProject = ref(1)
   const chosenIssueType = ref(0)
   const customFieldsValues = ref([])
+  const formSubmitCount = ref(0)
   const reporter = ref('')
   const summaryField = ref('')
   const descriptionField = ref('')
 
-  const resetChosenIssueType = () => {
-    chosenIssueType.value = 0
-  }
+  const resetChosenIssueType = () => (chosenIssueType.value = 0)
 
   const clearCustomFields = () => {
     customFieldsValues.value.length = 0
     summaryField.value = ''
     descriptionField.value = ''
+    formSubmitCount.value++
   }
 
   const projectKey = computed(() => response.value[chosenProject.value].key)
@@ -71,6 +71,7 @@ export const useJiraForm = defineStore('jiraForm', () => {
     actualIssueTypes,
     issueTypeId,
     projectKey,
+    formSubmitCount,
     resetChosenIssueType,
     getCreateMeta,
     clearCustomFields,

@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onUpdated, inject, watch } from 'vue'
+import { ref, onUpdated, watch } from 'vue'
+import { useJiraForm } from '../stores/jiraForm'
+import { storeToRefs } from 'pinia'
 
-const isFormBtnClicked = inject('buttonClickListener')
+const store = useJiraForm()
 
 defineProps(['checkBoxFields'])
 
@@ -12,9 +14,9 @@ const uniqueCheckboxId = `list ${Math.random() * 1e18}`
 
 onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
 
-watch(isFormBtnClicked, () => {
-  checkBoxValues.value.length = 0
-})
+const { formSubmitCount } = storeToRefs(store)
+
+watch(formSubmitCount, () => (checkBoxValues.value.length = 0))
 
 const dropDownHide = () => {
   const checkList = document.getElementById(uniqueCheckboxId)
