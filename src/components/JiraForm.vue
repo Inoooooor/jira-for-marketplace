@@ -1,6 +1,7 @@
 <script setup>
 import HDE from '../plugin'
 import { ref } from 'vue'
+import { useJiraForm } from '../stores/jiraForm'
 import addChildTicketsToDescription from '../utils/addChildTicketsToDescription'
 import CorpLoadingScreen from './CorpLoadingScreen.vue'
 import JiraCustomFieldsGenerator from './JiraCustomFieldsGenerator.vue'
@@ -11,9 +12,8 @@ import JiraSummaryField from './JiraSummaryField.vue'
 import JiraDescriptionField from './JiraDescriptionField.vue'
 import JiraFormButton from './JiraFormButton.vue'
 import JiraIssueTypesField from './JiraIssueTypesField.vue'
-import { makeArrayFromCheckboxes } from '../utils/createArrayFromMulticheckbox'
-import { createBasicFields } from '../utils/createBasicFields'
-import { useJiraForm } from '../stores/jiraForm'
+import createArrayFromMulticheckbox from '../utils/createArrayFromMulticheckbox'
+import createBasicFields from '../utils/createBasicFields'
 
 const store = useJiraForm()
 
@@ -33,7 +33,7 @@ const addCustomFields = (basicObj) => {
         value: store.customFieldsValues[index],
       }
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
-      basicObj[field.key] = makeArrayFromCheckboxes(
+      basicObj[field.key] = createArrayFromMulticheckbox(
         store.customFieldsValues[index],
         field.allowedValues
       )
@@ -101,9 +101,9 @@ store.getCreateMeta()
     <div class="tabs">
       <div class="tab">
         <input
+          id="tab-1"
           type="radio"
           name="css-tabs"
-          id="tab-1"
           checked
           class="tab-switch"
         />
@@ -111,9 +111,9 @@ store.getCreateMeta()
         <div class="tab-content w-full h-full">
           <form
             v-if="store.response"
-            @submit.prevent="createIssue()"
             action=""
             class="grid grid-rows-10 gap-2 h-full"
+            @submit.prevent="createIssue()"
           >
             <JiraProjectFIeld />
             <JiraIssueTypesField />

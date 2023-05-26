@@ -39,4 +39,4 @@ const createBasicFields = ({
   return basicFieldsObj
 }
 
-export { createBasicFields }
+export default createBasicFields

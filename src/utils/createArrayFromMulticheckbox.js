@@ -1,4 +1,4 @@
-const makeArrayFromCheckboxes = (checkBoxesValues, allowedValues) => {
+const createArrayFromMulticheckbox = (checkBoxesValues, allowedValues) => {
   const basicArr = []
 
   if (import.meta.env.DEV)
@@ -10,4 +10,4 @@ const makeArrayFromCheckboxes = (checkBoxesValues, allowedValues) => {
   return basicArr
 }
 
-export { makeArrayFromCheckboxes }
+export default createArrayFromMulticheckbox

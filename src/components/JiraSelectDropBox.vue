@@ -3,7 +3,9 @@ import { ref, onUpdated, watch, onUnmounted } from 'vue'
 import { useJiraForm } from '../stores/jiraForm'
 import { storeToRefs } from 'pinia'
 
-defineProps(['checkBoxFields'])
+const props = defineProps({ checkBoxFields: { type: Array, required: true } })
+
+console.log(Array.isArray(props.checkBoxFields))
 
 const store = useJiraForm()
 
@@ -47,14 +49,14 @@ watch(formSubmitCount, clearValues)
     <span class="anchor" @click.stop="dropDownToggle">Выберите значения</span>
     <ul class="items" @click="stopListHideOnclick">
       <li
-        class="hover:bg-gray-200"
         v-for="(option, index) in checkBoxFields"
         :key="index"
+        class="hover:bg-gray-200"
       >
         <input
+          v-model="checkBoxValues[index]"
           class="align-middle"
           type="checkbox"
-          v-model="checkBoxValues[index]"
         />
         {{ option.value }}
       </li>

@@ -130,7 +130,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
       <JiraSelectDropBox
-        :checkBoxFields="field.allowedValues"
+        :check-box-fields="field.allowedValues"
         @checkBoxChange="checkBoxChange($event, index)"
       />
     </template>
