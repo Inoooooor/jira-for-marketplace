@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import HDE from '../plugin'
+import isFieldCustom from '../utils/filterCustomFields'
 
 export const useJiraForm = defineStore('jiraForm', () => {
   const { systemDomain } = HDE.vars
@@ -25,11 +26,9 @@ export const useJiraForm = defineStore('jiraForm', () => {
     descriptionField.value = ''
   }
 
-  const isFieldCustom = (field) => {
-    const fieldFilters = ['summary', 'description', 'issuetype', 'project']
-    if (!fieldFilters.includes(field.key) && field.required) return true
-    return false
-  }
+  const actualIssueTypes = computed(
+    () => response.value[chosenProject.value].issuetypes
+  )
 
   const customFieldsToRender = computed(() =>
     Object.values(
@@ -62,6 +61,7 @@ export const useJiraForm = defineStore('jiraForm', () => {
     reporter,
     summaryField,
     descriptionField,
+    actualIssueTypes,
     resetChosenIssueType,
     getCreateMeta,
     clearCustomFields,

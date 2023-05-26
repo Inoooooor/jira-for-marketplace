@@ -8,13 +8,12 @@ const store = useJiraForm()
       >Тема стора</label
     >
     <input
+      id="subject"
+      v-model="store.summaryField"
       maxlength="50"
       required
-      name=""
-      id="subject"
       class="wide-form-field border-gray-500 border"
       placeholder="Дайте здесь сводку проблемы"
-      v-model="store.summaryField"
     />
   </div>
 </template>

@@ -9,6 +9,7 @@ import JiraReporterField from './JiraReporterField.vue'
 import JiraSpectatorCheckbox from './JiraSpectatorCheckbox.vue'
 import JiraSummaryField from './JiraSummaryField.vue'
 import JiraDescriptionField from './JiraDescriptionField.vue'
+import JiraFormButton from './JiraFormButton.vue'
 import { makeArrayFromCheckboxes } from '../utils/createArrayFromMulticheckbox'
 import { createBasicFields } from '../utils/createBasicFields'
 import { useJiraForm } from '../stores/jiraForm'
@@ -25,9 +26,7 @@ const { systemDomain } = HDE.vars
 const reportersUrl = `https://${systemDomain}/rest/api/3/users/search?&maxResults=1000`
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
-// let descriptionValue = ref('')
 let reportersList = ref('')
-// let reporterValue = ref('')
 const customFieldsValues = ref([])
 const listenerForMultiCheckboxErase = ref(0)
 
@@ -124,8 +123,6 @@ const clearInput = () => {
   listenerForMultiCheckboxErase.value++
 }
 
-// getQuery()
-
 const fillValuesFromFields = (emittedFieldsArray) => {
   customFieldsValues.value = emittedFieldsArray
 }
@@ -150,26 +147,6 @@ const fillValuesFromFields = (emittedFieldsArray) => {
             action=""
             class="grid grid-rows-10 gap-2 h-full"
           >
-            <!-- <div class="grid grid-cols-12 h-10">
-              <label for="jiraProject" class="form-labels-pos required-field"
-                >Проект</label
-              >
-              <select
-                name="jiraProject"
-                id="jiraProject"
-                class="centered-form-field"
-                v-model="store.chosenProject"
-                @change="zerofier()"
-              >
-                <option
-                  v-for="(project, index) in store.response"
-                  :key="index"
-                  :value="index"
-                >
-                  {{ project.name }}
-                </option>
-              </select>
-            </div> -->
             <JiraProjectFIeld />
             <div class="grid grid-cols-12 h-10">
               <label for="issueType" class="form-labels-pos required-field"
@@ -183,8 +160,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 @change="clearInput()"
               >
                 <option
-                  v-for="(issue, index) in store.response[store.chosenProject]
-                    .issuetypes"
+                  v-for="(issue, index) in store.actualIssueTypes"
                   :value="index"
                   :key="index"
                 >
@@ -192,77 +168,14 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 </option>
               </select>
             </div>
-            <!-- <template v-if="reportersList">
-              <div class="grid grid-cols-12 h-10">
-                <label for="author" class="form-labels-pos">Автор</label>
-                <select
-                  v-model="reporterValue"
-                  name=""
-                  id="author"
-                  class="centered-form-field"
-                >
-                  <option value="">Не определен</option>
-                  <option
-                    v-for="(reporter, index) in reportersList"
-                    :value="reporter.accountId"
-                    :key="index"
-                  >
-                    {{ reporter.displayName }}
-                  </option>
-                </select>
-              </div>
-            </template> -->
             <JiraReporterField />
-            <!-- <div
-              class="grid grid-cols-12 place-items-start content-center border-b"
-            >
-              <input
-                class="col-start-4 col-span-1 h-4 checkbox-label relative invisible"
-                type="checkbox"
-                name=""
-                id="addSpectator"
-              />
-            </div> -->
             <JiraSpectatorCheckbox />
-            <!-- <div class="grid grid-cols-12 h-10">
-              <label for="subject" class="form-labels-pos required-field"
-                >Тема</label
-              >
-              <input
-                maxlength="50"
-                required
-                name=""
-                id="subject"
-                class="wide-form-field border-gray-500 border"
-                placeholder="Дайте здесь сводку проблемы"
-                v-model="store.summaryField"
-              />
-            </div> -->
             <JiraSummaryField />
-            <!-- <div class="grid grid-cols-12">
-              <label for="executor" class="form-labels-pos required-field"
-                >Описание</label
-              >
-              <textarea
-                name="executor"
-                required
-                id="executor"
-                class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
-                placeholder="Опишите здесь проблему"
-                v-model="descriptionValue"
-              ></textarea>
-            </div> -->
             <JiraDescriptionField />
             <customFieldsGenerator
               @input-change="fillValuesFromFields($event)"
             />
-            <div class="grid grid-cols-12">
-              <button
-                class="col-span-2 border border-blue-500 place-self-end self-center rounded hover:bg-blue-500 hover:text-white col-start-7 p-1"
-              >
-                Создать проблему
-              </button>
-            </div>
+            <JiraFormButton />
           </form>
           <template v-else>
             <loadingScreen />
