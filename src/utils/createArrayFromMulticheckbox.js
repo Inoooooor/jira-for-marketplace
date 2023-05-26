@@ -1,9 +1,11 @@
 const makeArrayFromCheckboxes = (checkBoxesValues, allowedValues) => {
   const basicArr = []
-  console.log(JSON.parse(checkBoxesValues))
-  console.log(allowedValues)
+
+  if (import.meta.env.DEV)
+    console.table([JSON.parse(checkBoxesValues), allowedValues])
+
   JSON.parse(checkBoxesValues).forEach((checked, index) => {
-    if (checked === true) basicArr.push({ value: allowedValues[index].value })
+    if (checked) basicArr.push({ value: allowedValues[index].value })
   })
   return basicArr
 }

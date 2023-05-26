@@ -1,12 +1,14 @@
 <script setup>
 import HDE from '../plugin'
 import { ref, provide } from 'vue'
-import { addIdToDescription } from '../utils/idToJiraDescription.js'
+import { addIdToDescription } from '../utils/addChildTicketsToDescription'
 import loadingScreen from './loadingScreen.vue'
 import customFieldsGenerator from './customFieldsGenerator.vue'
 import JiraProjectFIeld from './JiraProjectField.vue'
 import JiraReporterField from './JiraReporterField.vue'
-import { makeArrayFromCheckboxes } from '../utils/helpers'
+import JiraSpectatorCheckbox from './JiraSpectatorCheckbox.vue'
+import JiraSummaryField from './JiraSummaryField.vue'
+import { makeArrayFromCheckboxes } from '../utils/createArrayFromMulticheckbox'
 import { createBasicFields } from '../utils/createBasicFields'
 import { useJiraForm } from '../stores/jiraForm'
 
@@ -212,7 +214,7 @@ const fillValuesFromFields = (emittedFieldsArray) => {
               </div>
             </template> -->
             <JiraReporterField />
-            <div
+            <!-- <div
               class="grid grid-cols-12 place-items-start content-center border-b"
             >
               <input
@@ -221,8 +223,9 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 name=""
                 id="addSpectator"
               />
-            </div>
-            <div class="grid grid-cols-12 h-10">
+            </div> -->
+            <JiraSpectatorCheckbox />
+            <!-- <div class="grid grid-cols-12 h-10">
               <label for="subject" class="form-labels-pos required-field"
                 >Тема</label
               >
@@ -235,7 +238,8 @@ const fillValuesFromFields = (emittedFieldsArray) => {
                 placeholder="Дайте здесь сводку проблемы"
                 v-model="store.summaryField"
               />
-            </div>
+            </div> -->
+            <JiraSummaryField />
             <div class="grid grid-cols-12">
               <label for="executor" class="form-labels-pos required-field"
                 >Описание</label
