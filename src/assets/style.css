@@ -22,7 +22,7 @@
   input[id='subject'],
   input[id='components'],
   input[id='environment'] {
-    @apply h-4/5 w-full inline border border-gray-300 rounded place-self-center text-gray-600;
+    @apply h-4/5 w-full inline place-self-center text-gray-600;
   }
 
   input {
@@ -69,5 +69,17 @@
   }
   ::-webkit-scrollbar-thumb {
     @apply bg-[rgba(170,_170,_170,_0.5)] rounded-md;
+  }
+
+  .field-position {
+    @apply grid grid-cols-12 h-10;
+  }
+
+  .field-position--no-height {
+    @apply grid grid-cols-12;
+  }
+
+  .field-border {
+    @apply border border-gray-300 rounded;
   }
 }

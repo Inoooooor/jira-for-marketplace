@@ -3,7 +3,7 @@ import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
 </script>
 <template>
-  <div class="grid grid-cols-12">
+  <div class="field-position--no-height">
     <label for="executor" class="form-labels-pos required-field"
       >Описание</label
     >

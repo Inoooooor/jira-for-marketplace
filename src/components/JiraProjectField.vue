@@ -10,7 +10,7 @@ const zerofier = () => {
 }
 </script>
 <template>
-  <div class="grid grid-cols-12 h-10">
+  <div class="field-position">
     <label for="jiraProject" class="form-labels-pos required-field"
       >Проект</label
     >
@@ -18,7 +18,7 @@ const zerofier = () => {
       id="jiraProject"
       v-model="store.chosenProject"
       name="jiraProject"
-      class="centered-form-field"
+      class="centered-form-field field-border"
       @change="zerofier()"
     >
       <option

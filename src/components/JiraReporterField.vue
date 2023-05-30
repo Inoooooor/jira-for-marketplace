@@ -28,9 +28,13 @@ const getReportersList = async () => {
 getReportersList()
 </script>
 <template v-if="reporters">
-  <div class="grid grid-cols-12 h-10">
+  <div class="field-position">
     <label for="author" class="form-labels-pos">Автор</label>
-    <select id="author" v-model="store.reporter" class="centered-form-field">
+    <select
+      id="author"
+      v-model="store.reporter"
+      class="centered-form-field field-border"
+    >
       <option value="">Не определен</option>
       <option
         v-for="reporter in reporters"

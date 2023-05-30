@@ -3,14 +3,14 @@ import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
 </script>
 <template>
-  <div class="grid grid-cols-12 h-10">
+  <div class="field-position">
     <label for="issueType" class="form-labels-pos required-field"
       >Тип проблемы</label
     >
     <select
       id="issueType"
       v-model="store.chosenIssueType"
-      class="centered-form-field"
+      class="centered-form-field field-border"
       @change="store.clearCustomFields"
     >
       <option
