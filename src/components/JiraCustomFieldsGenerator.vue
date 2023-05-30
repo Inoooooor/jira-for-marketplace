@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import JiraSelectDropBox from './JiraSelectDropBox.vue'
 import JiraCustomTextInput from './JiraCustomTextInput.vue'
+import JiraCustomUrlInput from './JiraCustomUrlInput.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
@@ -48,16 +49,7 @@ getParentIssues()
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
-      <input
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        type="url"
-        pattern="https?://.*"
-        placeholder="https://example.com"
-        required
-        maxlength="80"
-        class="wide-form-field field-border"
-      />
+      <JiraCustomUrlInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
       <input
