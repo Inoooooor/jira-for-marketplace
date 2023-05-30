@@ -10,10 +10,14 @@ import { useJiraForm } from '../stores/jiraForm'
 
 const store = useJiraForm()
 
-const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
-
 const checkBoxChange = (checkBoxArray, index) => {
   store.customFieldsValues[index] = checkBoxArray
+}
+
+const isTextOrEpicLabel = (customSchema = '') => {
+  if (customSchema.includes('textfield')) return true
+  if (customSchema.includes('epic-label')) return true
+  return false
 }
 </script>
 <template>
@@ -25,13 +29,10 @@ const checkBoxChange = (checkBoxArray, index) => {
     <label :for="field.key" class="form-labels-pos required-field">{{
       field.name
     }}</label>
-    <template v-if="field.schema.custom?.includes('textfield')">
+    <template v-if="isTextOrEpicLabel(field.schema.custom)">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-if="field.schema.custom?.includes('epic-label')">
-      <JiraCustomTextInput :input-id="field.key" :input-index="index" />
-    </template>
-    <template v-if="field.schema.custom?.includes('url')">
+    <template v-else-if="field.schema.custom?.includes('url')">
       <JiraCustomUrlInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-else-if="field.schema.custom?.includes('float')">
@@ -46,7 +47,7 @@ const checkBoxChange = (checkBoxArray, index) => {
     <template v-else-if="field.schema.type?.includes('issuelink')">
       <JiraSubtaskSelect :select-id="field.key" :select-index="index" />
     </template>
-    <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
+    <template v-else-if="field.schema.custom?.includes('multicheckboxes')">
       <JiraSelectDropBox
         :check-box-fields="field.allowedValues"
         @check-box-change="checkBoxChange($event, index)"
@@ -54,4 +55,3 @@ const checkBoxChange = (checkBoxArray, index) => {
     </template>
   </div>
 </template>
-<style lang=""></style>
