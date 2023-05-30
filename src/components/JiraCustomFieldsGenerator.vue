@@ -4,8 +4,10 @@ import JiraSelectDropBox from './JiraSelectDropBox.vue'
 import JiraCustomTextInput from './JiraCustomTextInput.vue'
 import JiraCustomUrlInput from './JiraCustomUrlInput.vue'
 import JiraCustomFloatInput from './JiraCustomFloatInput.vue'
+import JiraCustomDateInput from './JiraCustomDateInput.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
+
 const store = useJiraForm()
 
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
@@ -55,16 +57,8 @@ getParentIssues()
     <template v-else-if="field.schema.custom.includes('float')">
       <JiraCustomFloatInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
-      <input
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        type="date"
-        min="1943-01-01"
-        max="2039-12-31"
-        class="wide-form-field field-border h-full"
-      />
+    <template v-else-if="field.schema.custom.includes('datepicker')">
+      <JiraCustomDateInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
       <select
