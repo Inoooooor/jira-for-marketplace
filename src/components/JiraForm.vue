@@ -26,19 +26,25 @@ const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
 
 const customFieldsValues = ref([])
 
+const selectedField = (selected) => {
+  return { value: selected }
+}
+
+const selectedIssue = (selected) => {
+  return { key: selected }
+}
+
 const addCustomFields = (basicObj) => {
   store.customFieldsToRender.forEach((field, index) => {
     if (field.schema.custom === TYPE_BASE + 'select') {
-      basicObj[field.key] = {
-        value: store.customFieldsValues[index],
-      }
+      basicObj[field.key] = selectedField(store.customFieldsValues[index])
     } else if (field.schema.custom === TYPE_BASE + 'multicheckboxes') {
       basicObj[field.key] = createArrayFromMulticheckbox(
         store.customFieldsValues[index],
         field.allowedValues
       )
     } else if (field.schema.type === 'issuelink') {
-      basicObj[field.key] = { key: store.customFieldsValues[index] }
+      basicObj[field.key] = selectedIssue(store.customFieldsValues[index])
     } else {
       basicObj[field.key] = store.customFieldsValues[index]
     }
