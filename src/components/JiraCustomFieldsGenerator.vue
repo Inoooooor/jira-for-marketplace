@@ -1,43 +1,20 @@
 <script setup>
-import { ref } from 'vue'
 import JiraSelectDropBox from './JiraSelectDropBox.vue'
 import JiraCustomTextInput from './JiraCustomTextInput.vue'
 import JiraCustomUrlInput from './JiraCustomUrlInput.vue'
 import JiraCustomFloatInput from './JiraCustomFloatInput.vue'
 import JiraCustomDateInput from './JiraCustomDateInput.vue'
 import JiraCustomSelect from './JiraCustomSelect.vue'
-import HDE from '../plugin'
+import JiraSubtaskSelect from './JiraSubtaskSelect.vue'
 import { useJiraForm } from '../stores/jiraForm'
 
 const store = useJiraForm()
 
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
-const parentIssuesArr = ref([])
-
-const { systemDomain } = HDE.vars
-
-const parentIssuesUrl = `https://${systemDomain}/rest/api/3/search?maxResults=10000&fields=id`
-
-const getParentIssues = async () => {
-  try {
-    const { data } = await HDE.request({
-      auth: 'JiraAuth',
-      url: parentIssuesUrl,
-      method: 'GET',
-      contentType: 'application/json',
-    })
-    parentIssuesArr.value = data.issues
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 const checkBoxChange = (checkBoxArray, index) => {
   store.customFieldsValues[index] = checkBoxArray
 }
-
-getParentIssues()
 </script>
 <template>
   <div
@@ -66,23 +43,8 @@ getParentIssues()
     <template v-else-if="field.schema.custom?.includes('select')">
       <JiraCustomSelect :field="field" :select-index="index" />
     </template>
-    <template
-      v-else-if="field.schema.type === 'issuelink' && parentIssuesArr.length"
-    >
-      <select
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        class="wide-form-field field-border h-full"
-      >
-        <option
-          v-for="option in parentIssuesArr"
-          :key="option.id"
-          :value="option.key"
-        >
-          {{ option.key }}
-        </option>
-      </select>
+    <template v-else-if="field.schema.type?.includes('issuelink')">
+      <JiraSubtaskSelect :select-id="field.key" :select-index="index" />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'multicheckboxes'">
       <JiraSelectDropBox
