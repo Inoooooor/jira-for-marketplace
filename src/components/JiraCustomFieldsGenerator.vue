@@ -26,11 +26,11 @@ const getParentIssues = async () => {
   }
 }
 
-getParentIssues()
-
 const checkBoxChange = (checkBoxArray, index) => {
   store.customFieldsValues[index] = checkBoxArray
 }
+
+getParentIssues()
 </script>
 <template>
   <div
@@ -41,12 +41,10 @@ const checkBoxChange = (checkBoxArray, index) => {
     <label :for="field.key" class="form-labels-pos required-field">{{
       field.name
     }}</label>
-    <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
+    <template v-if="field.schema.custom.includes('textfield')">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
-    <template
-      v-if="field.schema.custom === 'com.pyxis.greenhopper.jira:gh-epic-label'"
-    >
+    <template v-if="field.schema.custom.includes('epic-label')">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
