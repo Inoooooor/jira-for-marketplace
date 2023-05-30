@@ -5,6 +5,7 @@ import JiraCustomTextInput from './JiraCustomTextInput.vue'
 import JiraCustomUrlInput from './JiraCustomUrlInput.vue'
 import JiraCustomFloatInput from './JiraCustomFloatInput.vue'
 import JiraCustomDateInput from './JiraCustomDateInput.vue'
+import JiraCustomSelect from './JiraCustomSelect.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 
@@ -60,21 +61,8 @@ getParentIssues()
     <template v-else-if="field.schema.custom.includes('datepicker')">
       <JiraCustomDateInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom === TYPE_BASE + 'select'">
-      <select
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        class="wide-form-field field-border h-full"
-      >
-        <option
-          v-for="option in field.allowedValues"
-          :key="option.id"
-          :value="option.value"
-        >
-          {{ option.value }}
-        </option>
-      </select>
+    <template v-else-if="field.schema.custom.includes('select')">
+      <JiraCustomSelect :field="field" :select-index="index" />
     </template>
     <template
       v-else-if="field.schema.type === 'issuelink' && parentIssuesArr.length"
