@@ -10,10 +10,6 @@ import { useJiraForm } from '../stores/jiraForm'
 
 const store = useJiraForm()
 
-const checkBoxChange = (checkBoxArray, index) => {
-  store.customFieldsValues[index] = checkBoxArray
-}
-
 const isTextOrEpicLabel = (customSchema = '') => {
   if (customSchema.includes('textfield')) return true
   if (customSchema.includes('epic-label')) return true
@@ -50,7 +46,7 @@ const isTextOrEpicLabel = (customSchema = '') => {
     <template v-else-if="field.schema.custom?.includes('multicheckboxes')">
       <JiraSelectDropBox
         :check-box-fields="field.allowedValues"
-        @check-box-change="checkBoxChange($event, index)"
+        :multi-checkbox-index="index"
       />
     </template>
   </div>

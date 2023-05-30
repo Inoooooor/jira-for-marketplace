@@ -19,6 +19,7 @@ const store = useJiraForm()
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
+
 const { systemDomain } = HDE.vars
 
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`

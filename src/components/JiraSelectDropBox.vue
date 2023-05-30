@@ -3,11 +3,12 @@ import { ref, onUpdated, watch, onUnmounted } from 'vue'
 import { useJiraForm } from '../stores/jiraForm'
 import { storeToRefs } from 'pinia'
 
-defineProps({ checkBoxFields: { type: Array, required: true } })
+const props = defineProps({
+  checkBoxFields: { type: Array, required: true },
+  multiCheckboxIndex: { type: Number, required: true },
+})
 
 const store = useJiraForm()
-
-const emit = defineEmits(['checkBoxChange'])
 
 const checkBoxValues = ref([])
 
@@ -36,7 +37,12 @@ const stopListHideOnclick = (e) => e.stopPropagation()
 
 tabsWrapper.addEventListener('click', dropDownHide)
 
-onUpdated(() => emit('checkBoxChange', JSON.stringify(checkBoxValues.value)))
+onUpdated(() => {
+  store.customFieldsValues[props.multiCheckboxIndex] = JSON.stringify(
+    checkBoxValues.value
+  )
+  console.log(JSON.stringify(checkBoxValues.value))
+})
 
 onUnmounted(() => tabsWrapper.removeEventListener('click', dropDownHide))
 
