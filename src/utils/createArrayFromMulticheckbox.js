@@ -1,10 +1,9 @@
 const createArrayFromMulticheckbox = (checkBoxesValues, allowedValues) => {
   const basicArr = []
 
-  if (import.meta.env.DEV)
-    console.table([JSON.parse(checkBoxesValues), allowedValues])
+  if (import.meta.env.DEV) console.table([checkBoxesValues, allowedValues])
 
-  JSON.parse(checkBoxesValues).forEach((checked, index) => {
+  checkBoxesValues.forEach((checked, index) => {
     if (checked) basicArr.push({ value: allowedValues[index].value })
   })
   return basicArr

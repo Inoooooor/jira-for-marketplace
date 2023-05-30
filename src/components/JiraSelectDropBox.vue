@@ -38,10 +38,7 @@ const stopListHideOnclick = (e) => e.stopPropagation()
 tabsWrapper.addEventListener('click', dropDownHide)
 
 onUpdated(() => {
-  store.customFieldsValues[props.multiCheckboxIndex] = JSON.stringify(
-    checkBoxValues.value
-  )
-  console.log(JSON.stringify(checkBoxValues.value))
+  store.customFieldsValues[props.multiCheckboxIndex] = checkBoxValues.value
 })
 
 onUnmounted(() => tabsWrapper.removeEventListener('click', dropDownHide))
