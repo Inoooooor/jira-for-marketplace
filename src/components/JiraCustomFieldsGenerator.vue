@@ -14,7 +14,9 @@ const store = useJiraForm()
 const TYPE_BASE = 'com.atlassian.jira.plugin.system.customfieldtypes:'
 
 const parentIssuesArr = ref([])
+
 const { systemDomain } = HDE.vars
+
 const parentIssuesUrl = `https://${systemDomain}/rest/api/3/search?maxResults=10000&fields=id`
 
 const getParentIssues = async () => {
@@ -46,22 +48,22 @@ getParentIssues()
     <label :for="field.key" class="form-labels-pos required-field">{{
       field.name
     }}</label>
-    <template v-if="field.schema.custom.includes('textfield')">
+    <template v-if="field.schema.custom?.includes('textfield')">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-if="field.schema.custom.includes('epic-label')">
+    <template v-if="field.schema.custom?.includes('epic-label')">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-if="field.schema.custom.includes('url')">
+    <template v-if="field.schema.custom?.includes('url')">
       <JiraCustomUrlInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom.includes('float')">
+    <template v-else-if="field.schema.custom?.includes('float')">
       <JiraCustomFloatInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom.includes('datepicker')">
+    <template v-else-if="field.schema.custom?.includes('datepicker')">
       <JiraCustomDateInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom.includes('select')">
+    <template v-else-if="field.schema.custom?.includes('select')">
       <JiraCustomSelect :field="field" :select-index="index" />
     </template>
     <template
