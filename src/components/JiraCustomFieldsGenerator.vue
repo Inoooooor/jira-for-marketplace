@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import JiraSelectDropBox from './JiraSelectDropBox.vue'
 import JiraCustomTextInput from './JiraCustomTextInput.vue'
 import JiraCustomUrlInput from './JiraCustomUrlInput.vue'
+import JiraCustomFloatInput from './JiraCustomFloatInput.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
@@ -48,19 +49,11 @@ getParentIssues()
     <template v-if="field.schema.custom.includes('epic-label')">
       <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-if="field.schema.custom === TYPE_BASE + 'url'">
+    <template v-if="field.schema.custom.includes('url')">
       <JiraCustomUrlInput :input-id="field.key" :input-index="index" />
     </template>
-    <template v-else-if="field.schema.custom === TYPE_BASE + 'float'">
-      <input
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        type="number"
-        min="1"
-        step="0.001"
-        class="wide-form-field field-border"
-      />
+    <template v-else-if="field.schema.custom.includes('float')">
+      <JiraCustomFloatInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-else-if="field.schema.custom === TYPE_BASE + 'datepicker'">
       <input
