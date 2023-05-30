@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import JiraSelectDropBox from './JiraSelectDropBox.vue'
+import JiraCustomTextInput from './JiraCustomTextInput.vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 const store = useJiraForm()
@@ -41,24 +42,12 @@ const checkBoxChange = (checkBoxArray, index) => {
       field.name
     }}</label>
     <template v-if="field.schema.custom === TYPE_BASE + 'textfield'">
-      <input
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        type="text"
-        class="wide-form-field field-border"
-      />
+      <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
     <template
       v-if="field.schema.custom === 'com.pyxis.greenhopper.jira:gh-epic-label'"
     >
-      <input
-        :id="field.key"
-        v-model="store.customFieldsValues[index]"
-        required
-        type="text"
-        class="wide-form-field field-border"
-      />
+      <JiraCustomTextInput :input-id="field.key" :input-index="index" />
     </template>
     <template v-if="field.schema.custom === TYPE_BASE + 'url'">
       <input
