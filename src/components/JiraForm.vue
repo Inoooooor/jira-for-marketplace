@@ -1,6 +1,5 @@
 <script setup>
 import HDE from '../plugin'
-import { ref } from 'vue'
 import { useJiraForm } from '../stores/jiraForm'
 import addChildTicketsToDescription from '../utils/addChildTicketsToDescription'
 import CorpLoadingScreen from './CorpLoadingScreen.vue'
@@ -23,8 +22,6 @@ const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
 
 const createIssueUrl = `https://${systemDomain}/rest/api/3/issue/`
-
-const customFieldsValues = ref([])
 
 const selectedField = (selected) => {
   return { value: selected }
@@ -95,10 +92,6 @@ const createIssue = async () => {
   }
 }
 
-const fillValuesFromFields = (emittedFieldsArray) => {
-  customFieldsValues.value = emittedFieldsArray
-}
-
 store.getCreateMeta()
 </script>
 
@@ -127,9 +120,7 @@ store.getCreateMeta()
             <JiraSpectatorCheckbox />
             <JiraSummaryField />
             <JiraDescriptionField />
-            <JiraCustomFieldsGenerator
-              @input-change="fillValuesFromFields($event)"
-            />
+            <JiraCustomFieldsGenerator />
             <JiraFormButton />
           </form>
           <template v-else>
