@@ -1,3 +1,4 @@
+<script setup></script>
 <template>
   <div
     class="field-position--no-height place-items-start content-center border-b"
@@ -9,5 +10,3 @@
     />
   </div>
 </template>
-<script setup></script>
-<style lang="scss"></style>

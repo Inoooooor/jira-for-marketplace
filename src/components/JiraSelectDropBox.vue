@@ -64,7 +64,7 @@ watch(formSubmitCount, clearValues)
     </ul>
   </div>
 </template>
-<style lang="scss">
+<style scoped lang="scss">
 .dropdown-check-list {
   display: inline-block;
   grid-column-start: 4;

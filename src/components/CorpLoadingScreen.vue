@@ -4,4 +4,3 @@
     <img src="https://cdn.helpdeskeddy.com/img/loading2.gif" alt="loadingHDE" />
   </div>
 </template>
-<style lang=""></style>
