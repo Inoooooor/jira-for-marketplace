@@ -15,4 +15,3 @@ const store = useJiraForm()
     />
   </div>
 </template>
-<style lang="scss"></style>

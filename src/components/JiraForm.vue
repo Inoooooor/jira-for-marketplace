@@ -141,7 +141,7 @@ store.getCreateMeta()
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .wrapper {
   width: 100%;
   height: 100%;
@@ -150,7 +150,7 @@ store.getCreateMeta()
 .tabs {
   position: relative;
   background: #2684ff;
-  height: 14.75rem;
+  height: 100%;
   &:before,
   &:after {
     content: '';

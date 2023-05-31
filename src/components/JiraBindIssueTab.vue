@@ -155,4 +155,3 @@ const unbindChildTicket = async () => {
     </div>
   </template>
 </template>
-<style scope lang="css"></style>
