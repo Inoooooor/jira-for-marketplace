@@ -52,7 +52,14 @@ export const useJiraForm = defineStore('jiraForm', () => {
         method: 'GET',
         contentType: 'application/json',
       })
+
       response.value = data.projects
+
+      if (!data) throw new Error('Указан неверный домен')
+
+      if (response.value.length === 0)
+        throw new Error('Указаны неверные доступы для авторизации')
+
       if (import.meta.env.DEV) console.log('from pinia', response.value)
     } catch (error) {
       console.log(error)

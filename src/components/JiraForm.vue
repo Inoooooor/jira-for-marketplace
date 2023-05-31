@@ -110,7 +110,7 @@ store.getCreateMeta()
         <label for="tab-1" class="tab-label">Создать задачи</label>
         <div class="tab-content w-full h-full">
           <form
-            v-if="store.response"
+            v-if="store.response?.length"
             action=""
             class="grid grid-rows-10 gap-2 h-full"
             @submit.prevent="createIssue()"
