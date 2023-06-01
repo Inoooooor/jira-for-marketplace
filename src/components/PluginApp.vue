@@ -18,7 +18,7 @@ const getUrl = `https://${systemDomain}/rest/api/2/issue/createmeta?expand=proje
 const createIssueUrl = `https://${systemDomain}/rest/api/2/issue/`
 
 const response = ref(null)
-let chosenProject = ref(16)
+let chosenProject = ref(0)
 let summaryValue = ref('')
 let descriptionValue = ref('')
 let reportersList = ref('')
@@ -55,7 +55,11 @@ const fieldsList = computed(() =>
   ).filter((field) => isFieldRendered(field))
 )
 
-//functions
+const initialProject = (projects = []) => {
+  const helpDeskProjectId = '10100'
+  return projects.findIndex((project) => project.id === helpDeskProjectId)
+}
+
 const getQuery = async () => {
   try {
     const { data } = await HDE.request({
@@ -65,6 +69,7 @@ const getQuery = async () => {
       contentType: 'application/json',
     })
     response.value = data.projects
+    chosenProject.value = initialProject(data.projects)
     if (DEV) console.log(data.projects)
   } catch (error) {
     console.log(error)
