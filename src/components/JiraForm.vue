@@ -1,4 +1,5 @@
 <script setup>
+import { onUnmounted } from 'vue'
 import HDE from '../plugin'
 import { useJiraForm } from '../stores/jiraForm'
 import addChildTicketsToDescription from '../utils/addChildTicketsToDescription'
@@ -93,7 +94,33 @@ const createIssue = async () => {
   }
 }
 
-store.getCreateMeta()
+const selectPluginBtn = () => {
+  let pluginBtn
+  const { name } = HDE.getState().plugin
+  const BtnsTextClass = '.ticket-plugins__button-text'
+  const allPluginsBtns = window.parent.document.querySelectorAll(BtnsTextClass)
+
+  allPluginsBtns.forEach((node) => {
+    if (node.innerText.includes(name))
+      pluginBtn = node.parentNode.parentNode.parentNode
+  })
+
+  if (import.meta.env.DEV) {
+    console.log('THIS PLUGIN', pluginBtn)
+    console.log(allPluginsBtns)
+  }
+
+  return pluginBtn
+}
+
+const pluginBtn = selectPluginBtn()
+
+pluginBtn.addEventListener('click', () => store.getCreateMeta(), {
+  once: true,
+})
+onUnmounted(() =>
+  pluginBtn.removeEventListener('click', () => store.getCreateMeta())
+)
 </script>
 
 <template>
