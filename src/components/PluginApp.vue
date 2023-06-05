@@ -305,7 +305,7 @@ const logTest = (variable) => console.log(variable)
                 >Тема</label
               >
               <input
-                maxlength="50"
+                maxlength="220"
                 required
                 name=""
                 id="subject"
