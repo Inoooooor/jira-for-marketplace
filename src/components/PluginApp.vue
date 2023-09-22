@@ -223,9 +223,9 @@ const clickHandler = () => {
     <div class="tabs">
       <div class="tab">
         <input
+          id="tab-1"
           type="radio"
           name="css-tabs"
-          id="tab-1"
           checked
           class="tab-switch"
         />
@@ -233,19 +233,18 @@ const clickHandler = () => {
         <div class="tab-content w-full h-full">
           <form
             v-if="response && true"
-            @submit.prevent="createIssue()"
-            action=""
             class="grid grid-rows-10 gap-2 h-full"
+            @submit.prevent="createIssue()"
           >
             <div class="grid grid-cols-12 h-10">
               <label for="jiraProject" class="form-labels-pos required-field"
                 >Проект</label
               >
               <select
-                name="jiraProject"
                 id="jiraProject"
-                class="centered-form-field"
                 v-model="chosenProject"
+                name="jiraProject"
+                class="centered-form-field"
                 @change="zerofier()"
               >
                 <option
@@ -262,16 +261,15 @@ const clickHandler = () => {
                 >Тип проблемы</label
               >
               <select
-                name=""
                 id="issueType"
-                class="centered-form-field"
                 v-model="chosenIssueTypeIndex"
+                class="centered-form-field"
                 @change="clearInput()"
               >
                 <option
                   v-for="(issue, index) in response[chosenProject].issuetypes"
-                  :value="index"
                   :key="index"
+                  :value="index"
                 >
                   {{ issue.name }}
                 </option>
@@ -282,17 +280,16 @@ const clickHandler = () => {
               <div class="grid grid-cols-12 h-10">
                 <label for="author" class="form-labels-pos">Автор</label>
                 <select
-                  v-model="reporterValue"
-                  name=""
                   id="author"
+                  v-model="reporterValue"
                   class="centered-form-field"
                   @change="logTest(reporterValue)"
                 >
                   <option value="">Не определен</option>
                   <option
                     v-for="(reporter, index) in reportersList"
-                    :value="reporter.name"
                     :key="index"
+                    :value="reporter.name"
                   >
                     {{ reporter.displayName }}
                   </option>
@@ -303,10 +300,9 @@ const clickHandler = () => {
               class="grid grid-cols-12 place-items-start content-center border-b"
             >
               <input
+                id="addSpectator"
                 class="col-start-4 col-span-1 h-4 checkbox-label relative invisible"
                 type="checkbox"
-                name=""
-                id="addSpectator"
               />
             </div>
             <div class="grid grid-cols-12 h-10">
@@ -314,13 +310,12 @@ const clickHandler = () => {
                 >Тема</label
               >
               <input
+                id="subject"
+                v-model="summaryValue"
                 maxlength="220"
                 required
-                name=""
-                id="subject"
                 class="wide-form-field border-gray-500 border"
                 placeholder="Дайте здесь сводку проблемы"
-                v-model="summaryValue"
               />
             </div>
             <div class="grid grid-cols-12">
@@ -328,20 +323,20 @@ const clickHandler = () => {
                 >Описание</label
               >
               <textarea
+                id="executor"
+                v-model="descriptionValue"
                 name="executor"
                 required
-                id="executor"
                 class="wide-form-field max-h-[200px] min-h-[30px] auto-rows-max"
                 placeholder="Опишите здесь проблему"
-                v-model="descriptionValue"
               ></textarea>
             </div>
             <customFieldsGenerator
-              :fieldsList="fieldsList"
+              :fields-list="fieldsList"
               @input-change="fillValuesFromFields($event)"
             />
             <div class="grid grid-cols-12">
-              <FormSendButton :isFormSent="isFormSent" />
+              <FormSendButton :is-form-sent="isFormSent" />
             </div>
           </form>
           <template v-else>
@@ -351,7 +346,7 @@ const clickHandler = () => {
       </div>
       <!-- Связка задач в джире в разработке, не удалять -->
       <div class="tab">
-        <input type="radio" name="css-tabs" id="tab-2" class="tab-switch" />
+        <input id="tab-2" type="radio" name="css-tabs" class="tab-switch" />
         <label for="tab-2" class="tab-label">Связать задачи</label>
         <div class="tab-content w-full grid grid-rows-[1fr_minmax(100px,_7fr)]">
           <bindIssuesTab />
