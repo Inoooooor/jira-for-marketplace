@@ -1,9 +1,9 @@
 <template>
   <button
     class="col-span-2 border border-blue-500 place-self-end self-center rounded hover:bg-blue-500 hover:text-white col-start-7 w-24 h-full flex justify-center items-center"
-    :disabled="isFormSend"
+    :disabled="isFormSent"
   >
-    <template v-if="isFormSend">
+    <template v-if="isFormSent">
       <svg
         class="animate-spin"
         xmlns="http://www.w3.org/2000/svg"

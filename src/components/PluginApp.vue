@@ -210,10 +210,11 @@ const fillValuesFromFields = (emittedFieldsArray) => {
 const logTest = (variable) => console.log(variable)
 
 const clickHandler = () => {
+  const loaderDurationMs = 4000
   isFormSent.value = true
   setTimeout(() => {
     isFormSent.value = false
-  }, 5000)
+  }, loaderDurationMs)
 }
 </script>
 
