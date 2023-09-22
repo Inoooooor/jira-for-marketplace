@@ -7,8 +7,9 @@ import customFieldsGenerator from './customFieldsGenerator.vue'
 import bindIssuesTab from './bindIssueTab.vue'
 import { TYPE_BASE } from '../config/configs'
 import { makeArrayFromCheckboxes } from '../utils/helpers'
+import FormSendButton from '../ui/FormSendButton.vue'
 
-const DEV = import.meta.env.DEV
+const { DEV } = import.meta.env
 
 const uniqueId = `[#${HDE.getState().ticketValues.uniqueId}]`
 const { systemDomain } = HDE.vars
@@ -26,6 +27,7 @@ let reporterValue = ref('')
 const customFieldsValues = ref([])
 const chosenIssueTypeIndex = ref(0)
 const listenerForMultiCheckboxErase = ref(0)
+const isFormSent = ref(false)
 
 const fieldsFilters = [
   'summary',
@@ -159,6 +161,7 @@ const createIssueDataMaker = (hdeIdList) => {
 
 const createIssue = async () => {
   try {
+    clickHandler()
     if (!summaryValue.value || !descriptionValue.value) {
       alert('Заполните все поля')
       return
@@ -171,17 +174,15 @@ const createIssue = async () => {
       url: createIssueUrl,
       method: 'POST',
       contentType: 'application/json',
-      data: {
-        fields: createIssueDataMaker(hdeIdList),
-      },
+      data: { fields: createIssueDataMaker(hdeIdList) },
     })
     if (DEV) console.log('ошибка', data)
     if (data.errors) {
       alert(JSON.stringify(data.errors))
       return
     }
+    // clearInput()
     alert('Задача создана успешно!')
-    clearInput()
   } catch (error) {
     console.log(error)
   }
@@ -207,6 +208,13 @@ const fillValuesFromFields = (emittedFieldsArray) => {
 }
 
 const logTest = (variable) => console.log(variable)
+
+const clickHandler = () => {
+  isFormSent.value = true
+  setTimeout(() => {
+    isFormSent.value = false
+  }, 5000)
+}
 </script>
 
 <template>
@@ -332,11 +340,7 @@ const logTest = (variable) => console.log(variable)
               @input-change="fillValuesFromFields($event)"
             />
             <div class="grid grid-cols-12">
-              <button
-                class="col-span-2 border border-blue-500 place-self-end self-center rounded hover:bg-blue-500 hover:text-white col-start-7 p-1"
-              >
-                Создать проблему
-              </button>
+              <FormSendButton :isFormSent="isFormSent" />
             </div>
           </form>
           <template v-else>
